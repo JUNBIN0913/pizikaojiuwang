@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>僻字考究網 - 專業校對終版</title>
+
+    <style>
+        /* 1. 字體導入 */
+        @font-face {
+            font-family: 'WenJinMincho';
+            src: local('文津宋體W 第3平面'), local('WenJinMinchoW-TTF'), url('WenJinMinchoW-TTF.ttc') format('collection');
+            font-display: swap;
+        }
+        @font-face { font-family: 'NomNaTong'; src: local('NomNaTong-Regular'), url('NomNaTong-Regular.otf'); font-display: swap; }
+        @font-face { font-family: 'TWKai'; src: local('全字庫正楷體'), url('全字庫正楷體Unicode2.ttf'); font-display: swap; }
+        @font-face { font-family: 'TWKaiExtB'; src: local('TW-Kai-Ext-B'), url('TW-Kai-Ext-B-98_1.ttf'); font-display: swap; }
+        @font-face { font-family: 'TWKai98'; src: local('TW-Kai-98_1'), url('TW-Kai-98_1.ttf'); font-display: swap; }
+        @font-face { font-family: 'TWKaiPlus98'; src: local('TW-Kai-Plus-98_1'), url('TW-Kai-Plus-98_1.ttf'); font-display: swap; }
+        @font-face { font-family: 'NanumMyeongjo'; src: local('NanumMyeongjo.ttf') format('truetype'); font-display: swap; }
+        @font-face {font-family: 'WenJinMincho-OTF';src: local('WenJinMincho-OTF'), local('WenJinMincho OTF'), local('WenJin Mincho'), local('文津明朝'), url('WenJinMincho-OTF.ttc') format('collection'); font-display: swap;}
+        @font-face { font-family: 'SimSunExtB'; src: local('SimSun-ExtB'), local('新細明體-ExtB'), url('SimSun-ExtB.ttf') format('truetype'); font-display: swap; }
+
+        /* 2. 基礎規範 */
+        * { box-sizing: border-box; font-weight: normal !important; -webkit-tap-highlight-color: rgba(90,46,46,0.2); }
+
+        body {
+            background-color: #f4f1ea; color: #333; margin: 0; padding: 0;
+            font-family: "標楷體", "BiauKai", "DFKai-SB", "Kaiti TC", "STKaiti", serif;
+            overflow-x: hidden; -webkit-text-size-adjust: 100%;
+        }
+
+        .nav-bar { background-color: #5a2e2e; padding: 10px 20px; display: flex; justify-content: flex-end; position: sticky; top: 0; z-index: 1000; }
+        .nav-btn { color: #f4f1ea; text-decoration: none; margin-left: 15px; font-size: 1.1em; cursor: pointer; background: none; border: 1px solid #7a4e4e; border-radius: 4px; font-family: "標楷體"; padding: 6px 12px; }
+
+        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+        header { text-align: center; margin-bottom: 20px; }
+        h1 { color: #5a2e2e; font-size: 2.2em; border-bottom: 3px double #5a2e2e; display: inline-block; padding-bottom: 10px; font-family: "標楷體"; }
+
+        .search-wrapper { display: flex; justify-content: center; max-width: 700px; margin: 0 auto 15px auto; align-items: stretch; }
+        #searchInput { 
+            flex: 1; padding: 12px 15px; font-size: 18px; border: 2px solid #5a2e2e; 
+            border-radius: 25px 0 0 25px; outline: none; font-family: "標楷體"; background: white; margin-right: -1px;
+        }
+        #searchBtn { 
+            padding: 0 25px; font-size: 18px; background-color: #5a2e2e; color: white; 
+            border: 2px solid #5a2e2e; border-radius: 0 25px 25px 0; cursor: pointer; font-family: "標楷體"; white-space: nowrap;
+        }
+        
+        .idc-toolbar { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 15px; }
+        .idc-btn { background: #fff; border: 1px solid #5a2e2e; color: #5a2e2e; padding: 10px 18px; font-size: 24px; cursor: pointer; border-radius: 4px; touch-action: manipulation; }
+
+        .all-chars-grid { width: 100%; border-collapse: collapse; background: white; margin-top: 20px; display: none; table-layout: fixed; }
+        .all-chars-grid td { border: 1px solid #5a2e2e; height: 75px; text-align: center; font-size: 2.2em; cursor: pointer; }
+        .all-chars-grid td img { height: 1em; width: auto; vertical-align: middle; }
+
+        .character-card { background: #fff; padding: 25px; border: 2px solid #5a2e2e; margin-top: 20px; margin-bottom: 30px; width: 100%; overflow: hidden; }
+        .char-visual { text-align: center; width: 100%; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 25px; }
+        .main-char { font-size: 100px !important; line-height: 1.1; margin: 0; color: #000; display: flex; justify-content: center; align-items: center; min-height: 110px; }
+        .main-char img { height: 1em; width: auto; vertical-align: middle; }
+        
+        .char-structure-box { text-align: center; margin-top: 10px; }
+        .char-structure { background: #f0ebe0; padding: 5px 12px; border-radius: 4px; font-size: 17px; display: inline-block; word-break: break-all; font-family: "WenJinMincho-OTF", "WenJinMincho", "全字庫正楷體", "標楷體", serif !important; }
+
+        .info-table { width: 100% !important; border-collapse: collapse; table-layout: fixed; }
+        .info-table th { background-color: #f9f7f2; color: #8b0000; width: 110px; font-size: 1.1em; text-align: center; border: 1px solid #5a2e2e; padding: 12px 8px; font-family: "標楷體", serif !important; }
+        .info-table td { text-align: left; font-size: 1.05em; line-height: 1.7; border: 1px solid #5a2e2e; padding: 12px 15px; word-wrap: break-word; font-family: "標楷體", serif !important; }
+
+        .book-img-container { display: block; width: 100%; margin-top: 10px; }
+        .book-img-container img { border: 1px solid #ccc; display: block; margin-bottom: 10px; cursor: zoom-in; }
+
+        .def-inline-flickr { display: inline-block; vertical-align: middle; line-height: 0; margin: 0; }
+        .def-inline-flickr img { height: 1em !important; width: auto !important; border: none !important; vertical-align: middle; }
+
+        /* 進階閱覽器樣式 */
+        .zoom-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9998; cursor: zoom-out; }
+        .zoom-viewer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; overflow: hidden; cursor: grab; touch-action: none; }
+        .zoom-viewer img { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1); max-height: 85vh; width: auto; max-width: none; }
+        .zoom-close { position: fixed; top: 20px; right: 20px; color: white; background: rgba(255,255,255,0.2); border: none; font-size: 30px; width: 50px; height: 50px; border-radius: 50%; z-index: 10000; cursor: pointer; display: none; }
+
+        /* 分頁按鈕樣式 */
+        .pagination-container { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 25px; margin-bottom: 40px; }
+        .page-btn { padding: 8px 15px; border: 1px solid #5a2e2e; background: white; color: #5a2e2e; cursor: pointer; font-family: "標楷體"; border-radius: 4px; }
+        .page-btn.active { background: #5a2e2e; color: white; }
+
+        /* 字體類別控制 */
+        .wen-jin-text { font-family: 'WenJinMincho', serif !important; }
+        .wen-jin-otf { font-family: 'WenJinMincho-OTF', serif !important; }
+        .nom-text { font-family: 'NomNaTong', serif !important; }
+        .tw-ext-b { font-family: 'TWKaiExtB', serif !important; }
+        .tw-kai-98 { font-family: 'TWKai98', serif !important; } 
+        .simsum-extb { font-family: 'SimSunExtB', serif !important; }
+        .tw-plus-98 { font-family: 'TWKaiPlus98', serif !important; }
+        .nanum-text { font-family: 'NanumMyeongjo', serif !important; }
+        .vn-roman { font-family: "Times New Roman", serif !important; }
+
+        @media screen and (max-width: 600px) {
+            .main-char { font-size: 85px !important; min-height: 90px; }
+            .info-table th { width: 90px; font-size: 1em; }
+            .idc-btn { padding: 12px 15px; font-size: 26px; }
+            .book-img-container img { max-width: 100% !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="zoomOverlay" class="zoom-overlay"></div>
+<button id="zoomClose" class="zoom-close">&times;</button>
+<div id="zoomViewer" class="zoom-viewer"><img id="viewerImg" src="" alt="閱覽中"></div>
+
+<nav class="nav-bar">
+    <button class="nav-btn" id="homeBtn">首頁</button>
+    <button class="nav-btn" id="showAllBtn">所有文字</button>
+</nav>
+
+<div class="container">
+    <header><h1>僻字考究網</h1></header>
+    <div id="searchView">
+        <div class="search-container">
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="搜尋文字或注音..." autocomplete="off">
+                <button id="searchBtn">查詢</button>
+            </div>
+            <div id="idcToolbar" class="idc-toolbar"></div>
+        </div>
+        <div id="cardList"></div>
+    </div>
+    <div id="allCharsView" style="display: none;">
+        <h2 style="text-align: center; color: #5a2e2e; font-size: 1.3em; font-family: '標楷體';">文字總表 (點擊查看詳情)</h2>
+        <table class="all-chars-grid" id="charsTable"></table>
+        <div id="pagination" class="pagination-container"></div>
+    </div>
+</div>
+
+<script>
+    /* 圖片變數定義 */
+    const zhao_img = `<img src="https://live.staticflickr.com/65535/55016074534_c948da8d75_t.jpg" alt="ㄓㄠ">`;
+    const wan_img = `<img src="https://live.staticflickr.com/65535/55016061868_85fce6bc84_t.jpg" alt="ㄨㄢˊ">`;
+    const liji_img = `<img src="https://live.staticflickr.com/65535/55046281397_c16fa6df01_t.jpg" alt="ㄓㄨㄛˊ">`;
+    const kao_img = `<img src="https://live.staticflickr.com/65535/55047463319_3b585f3f44_t.jpg" alt="ㄎㄠˋ">`;
+    const yi_img = `<img src="https://live.staticflickr.com/65535/55047484569_8ce6bac344_t.jpg" alt="ㄧˇ">`;
+    const ti_img = `<img src="https://live.staticflickr.com/65535/55047492724_8a69fcc986_t.jpg" alt="ㄊㄧˋ">`;
+    const ben_img = `<img src="https://live.staticflickr.com/65535/55047500839_ef5a001a3f_z.jpg" alt="ㄅㄣˇ">`;
+    const da_img = `<img src="https://live.staticflickr.com/65535/55047509489_ef023ecd62_t.jpg" alt="ㄉㄚˊ">`; 
+    const shuo_img = `<img src="https://live.staticflickr.com/65535/55046359392_74ebe3db85_t.jpg" alt="ㄕㄨㄛˋ">`;
+    const zhuan_img = `<img src="https://live.staticflickr.com/65535/55047528864_e08f8364b8_t.jpg" alt="ㄓㄨㄢˋ">`;
+    const yi_img_2 = `<img src="https://live.staticflickr.com/65535/55047630815_5535e1dd67_z.jpg" alt="ㄧˋ">`;
+    const lei_img = `<img src="https://live.staticflickr.com/65535/55047641674_f4bb217086_t.jpg" alt="ㄌㄟˊ">`;
+    const bian_img = `<img src="https://live.staticflickr.com/65535/55047392926_a1a4c9dbf0_t.jpg" alt="ㄅㄧㄢˋ">`;
+    const youye_img = `<img src="https://live.staticflickr.com/65535/55047591383_b5c7767541_t.jpg" alt="有頁">`;
+    const shi_img = `<img src="https://live.staticflickr.com/65535/55047452691_4f769ce582_t.jpg" alt="（車弋）">`;
+    const fangxi_img = `<img src="https://live.staticflickr.com/65535/55049687155_077b59d820_t.jpg" alt="（方西）">`;
+    const chuoling_img = `<img src="https://live.staticflickr.com/65535/55049533648_6e800cff3b_t.jpg" alt="（辶夌）">`;
+    const xing_img = `<img src="https://live.staticflickr.com/65535/55084206866_d117b45998_t.jpg" alt="（㓁一八）">`;
+    const pan_img = `<img src="https://live.staticflickr.com/65535/55084501114_ce4089ded3_t.jpg" alt="（欠卉殳皿）">`;
+    const zhen_img = `<img src="https://live.staticflickr.com/65535/55085184517_fb16e967cc_t.jpg" alt="（正真）">`;
+    const xing_img_2 = `<img src="https://live.staticflickr.com/65535/55086092456_33ef93ec74_t.jpg" alt="（亻决心）">`;
+    const yi4_img = `<img src="https://live.staticflickr.com/65535/55086361449_068f1c1654_t.jpg" alt="（言天井）">`;
+    const xi1_img = `<img src="https://live.staticflickr.com/65535/55086111846_7454cb120a_t.jpg" alt="（口虍命）">`;
+    const xi2_img = `<img src="https://live.staticflickr.com/65535/55086490250_a34be36411_t.jpg" alt="（口虍卩）">`;
+    const xi_wu_img = `<img src="https://live.staticflickr.com/65535/55086337368_55ef99fc15_t.jpg" alt="（囗無）">`;
+    const you_img_2 = `<img src="https://live.staticflickr.com/65535/55086347463_4bb881c6e3_t.jpg" alt="（夶㫗享）">`;
+    const xin_heart_img = `<img src="https://live.staticflickr.com/65535/55086152206_efb2bd67e2_t.jpg" alt="（君玄火）">`;
+    const mie_img_2 = `<img src="https://live.staticflickr.com/65535/55086534775_0803768f6f_t.jpg" alt="（冫屯火）">`;
+    const mie_img_3 = `<img src="https://live.staticflickr.com/65535/55086482014_4f1b908b60_t.jpg" alt="（氵乚二火）">`;
+    const wu_img_2 = `<img src="https://live.staticflickr.com/65535/55086602790_202b01f37f_t.jpg" alt="（口㇇乀了）">`;
+    const shou_huo_img = `<img src="https://live.staticflickr.com/65535/55085368742_9cd5f81ac0_t.jpg" alt="（忄守火）">`;
+    const shen_guang_xin_img = `<img src="https://live.staticflickr.com/65535/55086728935_000d550e70_t.jpg" alt="（身光心）">`;
+    const min2_2_img = `<img src="https://live.staticflickr.com/65535/55085482947_2543fe7cb1_t.jpg" alt="（冺䀠）">`;
+    const ti3_img = `<img src="https://live.staticflickr.com/65535/55086591538_0e52a3e20d_t.jpg" alt="（目目冖叔）">`;
+    const mu_shou_img = `<img src="https://live.staticflickr.com/65535/55086762640_c8b3afbe4a_t.jpg" alt="（㑄手）">`;
+    const jiu4_img = `<img src="https://live.staticflickr.com/65535/55085512992_35013cd847_t.jpg" alt="（木金水火土）">`;
+    const ya4_img = `<img src="https://live.staticflickr.com/65535/55086677489_eb42059365_t.jpg" alt="（丶冂亞）">`;
+    const muren_img = `<img src="https://live.staticflickr.com/65535/55092263627_0a48d2c3a2_t.jpg" alt="（木刃刃刃）">`;
+    const fish_yee_img = `<img src="https://live.staticflickr.com/65535/55092321367_d25334517d_t.jpg" alt="（魚罒疑）" style="width:1em; vertical-align:middle;">`;
+    const dong_shu_yu_img = `<img src="https://live.staticflickr.com/65535/55092347777_4e24ea6271_t.jpg" alt="（東殳玉）" style="height:1em; width:auto; vertical-align:middle;">`;
+    const huo_chu_img = `<img src="https://live.staticflickr.com/65535/55093976202_d69f2f4cf3_t.jpg" alt="（火處）" style="height:1em; width:auto; vertical-align:middle;">`;
+    const duan_qie_img = `<img src="https://live.staticflickr.com/65535/55095232285_12e55b1c8d_t.jpg" alt="（耑且）" style="height:1em; width:auto; vertical-align:middle;">`;
+    const duan_wu_img = `<img src="https://live.staticflickr.com/65535/55095231710_d863a8ef75_t.jpg" alt="（耑吾）" style="height:1em; width:auto; vertical-align:middle;">`;
+    const chuang_img = `<img src="https://live.staticflickr.com/65535/55093988562_0d7145d09d_t.jpg" alt="（爿床）" style="height:1em; width:auto; vertical-align:middle;">`;
+
+    /* 文字資料陣列 */
+    const characters = [
+        { char: "𲎱", structure: "⿻𠃏一", mainFont: "wen-jin-text", pinyin: `<span class="vn-roman">bàng</span>`, reading: "ㄅㄤˋ", definition: "即「磅」（ポンド）。", bookImg: `<img src="https://hc.jsecs.org/irg/ws2021/data/utc-evidence/UTC-03225-3.jpg" class="zoomable" style="max-width:350px">`, bookSource: "《袖珍薬説‧藥局秤量ﾉ表》" },
+        { 
+            char: "𲎴", structure: "⿱况下", mainFont: "nom-text",
+            pinyin: `<span class="vn-roman">n/a</span>（越南語：<span class="vn-roman">huống</span>）`, 
+            reading: `<span class="vn-roman">n/a</span>（越南語：<span class="vn-roman">huống</span>）`, 
+            definition: `如同。《詩經演音<span class="vn-roman">(Thi kinh diễn âm)</span>》<span class="nom-text">：「矣喂 罪之𠊛代𫢩𡗶𲎴湼亮 事𩛜少添習典」</span> <span class="vn-roman">(Hỡi ôi, tội chi người đời nay trời xuống nát loạn, sự đói thiếu thêm tấp đến.)</span><br>翻譯：唉！世人究竟犯了什麼罪，上天要降下這般破碎混亂，飢荒貧困也接踵而至。`, 
+            bookImg: `<img src="https://hc.jsecs.org/irg/ws2021/data/v-evidence/VN-F168F.jpg" class="zoomable" style="max-width:320px">`, bookSource: "喃產遺存保會" 
+        },
+        { 
+           char: "𲎹", structure: "⿰上鄧", mainFont: "nom-text",
+            pinyin: `<span class="vn-roman">n/a</span>（越南語：<span class="vn-roman">đăng</span>）`, 
+            reading: `<span class="vn-roman">n/a</span>（越南語：<span class="vn-roman">đăng</span>）`, 
+            definition: `但是。《詩經大全節要演義<span class="vn-roman">(Thi kinh đại toàn tiết yếu diễn nghĩa)</span>》<span class="nom-text">：「𲐧㝵𲎹例呐卒自外𠰘  例呐醜自外𠰘」</span> <span class="vn-roman">(Nhưng người dâng, lời nói xấu từ ngoài miệng)</span><br>翻譯：有人口出善言，但是也有人口出惡言。`, 
+            bookImg: `<img src="https://hc.jsecs.org/irg/ws2021/data/v-evidence/VN-F0B05.jpg" class="zoomable" style="max-width:320px">`, bookSource: "喃產遺存保會" 
+        },
+        { 
+            char: "𲎳", structure: "⿱三⿰三三", mainFont: "wen-jin-text", pinyin: `<span class="vn-roman">míng</span>`, reading: `ㄇㄧㄥˊ`, 
+            definition: `明白。《〈亳州老君碑古字譜〉考釋》：「『<span class="wen-jin-text">𲎳</span>厵』音『明原』，『<span class="wen-jin-text">𲎳</span>』由三個三組成，前面已修成乾坤正位之體，就明白根源了。三三為九，乃明九竅，達九天，通九霄，耀九州，故以『<span class="wen-jin-text">𲎳</span>』為明。」`, 
+            bookImg: `<img src="https://live.staticflickr.com/65535/54996930188_f6e14b640f.jpg" class="zoomable" style="max-width:350px">`, bookSource: "陸迪民《〈亳州老君碑古字譜〉考釋》" 
+        },
+        { 
+            char: "𲎵", structure: "⿰右百", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">n/a</span>（擬音<span class="vn-roman">[pɯ2]</span>）`, 
+            reading: `<span class="vn-roman">n/a</span>（擬音<span class="vn-roman">[pɯ2]</span>）`, 
+            definition: "壯語。指往右。《古壯語字典》：「往右，指犁田時呼牛往右行。」", 
+            bookImg: `<img src="https://hc.jsecs.org/irg/ws2021/data/gz-evidence/GZ-0381601.jpg" class="zoomable">`, bookSource: "《古壯語字典》" 
+        },
+        { 
+            char: "𲎶", structure: "⿰在乎", mainFont: "wen-jin-text",
+            pinyin: `<span class="vn-roman">n/a</span>（擬音<span class="vn-roman">[fu3]</span>）`, 
+            reading: `<span class="vn-roman">n/a</span>（擬音<span class="vn-roman">[fu3]</span>）`, 
+            definition: `壯語。《古壯語字典》：「同『<span class="tw-kai-98">䤣</span>』。指斧。」`, 
+            bookImg: `<img src="https://hc.jsecs.org/irg/ws2021/data/gz-evidence/GZ-1621602.jpg" class="zoomable">`, bookSource: "《古壯語字典》" 
+        },
+        { 
+            char: "𲎷", structure: "⿰丟光", mainFont: "wen-jin-text",
+            pinyin: `<span class="vn-roman">n/a</span>（擬音<span class="vn-roman">[kwe:ŋ1]</span>）`, 
+            reading: `<span class="vn-roman">n/a</span>（擬音<span class="vn-roman">[kwe:ŋ1]</span>）`, 
+            definition: `壯語。指丟；扔；拋棄。《古壯語字典》：「同『<span class="wen-jin-text">𱍣</span>、擴、<span class="def-inline-flickr"><img src="https://live.staticflickr.com/65535/54996987583_3361b3b1a0_t.jpg"></span>、<span class="def-inline-flickr"><img src="https://live.staticflickr.com/65535/54996987758_4a3478499e_t.jpg"></span>』。丟；扔；拋棄。<span class="wen-jin-text">𱍣</span><span class="def-inline-flickr"><img src="https://live.staticflickr.com/65535/54997201440_5371679fcc_t.jpg"></span>墰<span class="def-inline-flickr"><img src="https://live.staticflickr.com/65535/54997078248_13674b89e5_t.jpg"></span>」。 （翻譯：丟下池塘裡去。）`, 
+            bookImg: `<img src="https://hc.jsecs.org/irg/ws2021/data/gz-evidence/GZ-2161304.jpg" class="zoomable">`, bookSource: "《古壯語字典》" 
+        },
+        { 
+            char: "𲎺", structure: "⿰夭丨", mainFont: "wen-jin-text",
+            pinyin: `<span class="vn-roman">duǒ</span>`, reading: `ㄉㄨㄛˇ`, 
+            definition: `山名。《浙江地名疑難字研究‧浙江省富陽縣地名志》：「<span class="wen-jin-text">𲎺</span>柱<span class="tw-kai-98">䂭</span>山」。`, 
+            bookImg: `<img src="https://hc.jsecs.org/irg/ws2021/data/g-evidence/GDM-00351-001.jpg" class="zoomable" style="max-width:320px">`, bookSource: "《浙江省富陽縣地名志》" 
+        },
+        { 
+            char: "𲎻", structure: "⿰リ⿱土戈", mainFont: "wen-jin-text",
+            pinyin: `<span class="vn-roman">qián</span>`, reading: `ㄑㄧㄢˊ`, 
+            definition: `錢之異體。「瓊認<span class="wen-jin-text">𲎻</span>保布枚<span class="def-inline-flickr"><img src="https://live.staticflickr.com/65535/54997110499_66720d97ce_t.jpg"></span>京都<span class="tw-ext-b">𣌋</span>底摸。」`, 
+            bookImg: `<img src="https://hc.jsecs.org/irg/ws2021/data/v-evidence/VN-F20B5.jpg" class="zoomable" style="max-width:320px">` 
+        },
+        { 
+            char: "𲎼", structure: "⿰谷中", mainFont: "nom-text",
+            pinyin: `<span class="vn-roman">n/a</span>（越南語：<span class="vn-roman">giữa</span>）`, 
+            reading: `<span class="vn-roman">n/a</span>（越南語：<span class="vn-roman">giữa</span>）`, 
+            definition: `在……（之間∕中間）。《南交古今里巷歌謠註解<span class="vn-roman">(Tập thơ Nôm dân gian Nam Giao cổ kim lý hạng ca dao chú giải)</span>》<span class="nom-text">：「船𲎼英解𬡰昂 英辰 𦣰𲎼𠄩 姑娘𦣰𠄩邊」</span><span class="vn-roman">(Thuyền giữa anh giải (trải) chiếu ngang. Anh thì nằm giữa, hai cô nàng nằm hai bên.)</span>。<br>翻譯：船上，他鋪開了席子。他躺在中間，兩位姑娘躺在兩邊。`, 
+            bookImg: `<img src="https://hc.jsecs.org/irg/ws2021/data/v-evidence/VN-F1B7B.jpg" class="zoomable" style="max-width:320px">` 
+        },
+        { 
+            char: "𲎽", structure: "⿰中朋", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">n/a</span>（擬音<span class="vn-roman">[puŋ1]</span>）`, 
+            reading: `<span class="vn-roman">n/a</span>（擬音<span class="vn-roman">[puŋ1]</span>）`, 
+            definition: `壯語。《古壯語字典》：「指加（入）；摻（入）。歐淰庲<span class="wen-jin-text">𲎽</span>氿」。`, 
+            bookImg: `<img src="https://hc.jsecs.org/irg/ws2021/data/gz-evidence/GZ-0361401.jpg" class="zoomable">` 
+        },
+        { 
+            char: "𲎾", structure: "⿰串逐", mainFont: "nom-text",
+            pinyin: `<span class="vn-roman">n/a</span>（越南語：<span class="vn-roman">chuỗi</span>）`, 
+            reading: `<span class="vn-roman">n/a</span>（越南語：<span class="vn-roman">chuỗi</span>）`, 
+            definition: `連綿貫穿；串連；貫通。同「<span class="tw-ext-b">𦀵</span> 、<span class="tw-ext-b">𠁻</span> 、<span class="wen-jin-text">𲜝</span>」。<span class="vn-roman">Chuỗi ngày dài lê thê</span>（翻譯：漫長而拖沓的一連串日子。）；<span class="vn-roman">Lần chuỗi Bồ đề</span>（翻譯：撥動菩提串珠。）；<span class="vn-roman">Chuỗi tiền kẽm</span>（翻譯：一串錢。）。`, 
+            bookImg: `<img src="https://hc.jsecs.org/irg/ws2021/data/v-evidence/VN-F000D.jpg" class="zoomable" style="max-width:320px">` 
+        },
+        { char: "𰹬", structure: "⿰車藏", mainFont: "tw-ext-b", pinyin: `<span class="vn-roman">zhuàng</span>`, reading: `ㄓㄨㄤˋ`, definition: `「牽水<span class="tw-ext-b">𰹬</span>」：臺灣雲林縣口湖鄉的一種民間特殊祭儀。` },
+        { 
+            char: "𪹚", structure: "⿰火旁", mainFont: "tw-ext-b", pinyin: `<span class="vn-roman">bàng</span>`, reading: `ㄅㄤˋ`, 
+            definition: `「<span class="tw-ext-b">𪹚</span>龍」：為臺灣苗栗縣於元宵節的主要核心活動，該活動是由臺灣的客家人，於苗栗發展出的傳統元宵客家舞火龍活動之一。` 
+        },
+        { 
+            char: "𰻞", structure: `⿺辶⿳穴⿲月⿱<span class="simsun-extb">𮘎</span>⿰長<span class="simsun-extb">𮪉</span>刂心`, mainFont: "wen-jin-text", pinyin: `<span class="vn-roman">biáng</span>`, reading: `ㄅㄧㄤˊ`, 
+            definition: `「<span class="wen-jin-text">𰻞𰻞</span>麵」：為中國陝西關中地區的麵食。該麵屬於扯麵，透過揉、抻、甩、扯等步驟製作，麵條寬厚如褲腰帶般，食用前多加入肉燥或油潑辣子。` 
+        },
+        { 
+            char: "󺦇", structure: "⿰土只", mainFont: "tw-plus-98", pinyin: `<span class="vn-roman">zhuǎi</span>`, reading: `ㄓㄨㄞˇ`, 
+            definition: `地名。中國江蘇省宿遷市泗洪縣孫園鎮有<span class="tw-plus-98">󺦇</span>頭村、中國江蘇省淮安市盱眙縣有<span class="tw-plus-98">󺦇</span>橋。`,
+            bookSource: "《天地經緯 地名縱橫談》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55014001345_764dedd0e7_z.jpg" class="zoomable" style="max-width:320px"><span class="book-source-text" style="margin-top:15px; display:block;">《命途紀行》</span><img src="https://hc.jsecs.org/irg/ws2017/data/uk-evidence/UK-10948.png" class="zoomable" style="max-width:320px">`
+        },
+        { 
+            char: "𤨒", structure: "⿰王恩", mainFont: "tw-ext-b", pinyin: `<span class="vn-roman">yīn</span>`, reading: `ㄧㄣ`, 
+            definition: `1、人名。韓國女團<span class="vn-roman">T-ara</span>的成員之一：咸<span class="tw-ext-b">𤨒</span>晶（<span class="nanum-text">함은정</span>）。<br>2、鬼名，<span class="tw-ext-b">𤨒</span>內子。《道要靈祇神鬼品經》：「石精之鬼，名<span class="tw-ext-b">𤨒</span>（於巾切）內子。」`, 
+            bookImg: `<img src="https://library.ctext.org/s2350875/s2350875_0169.png" class="zoomable" referrerpolicy="no-referrer" style="max-width:350px">`, bookSource: "《道要靈祇神鬼品經》" 
+        },
+        { 
+            char: "蒏", structure: "⿳艹冖酉", mainFont: "", pinyin: `<span class="vn-roman">yǒng</span>`, reading: `ㄩㄥˇ`, 
+            definition: `酗酒至亂。《尚書正義五》：「沉湎酗蒏。……蒏，音詠。」`, 
+            bookImg: `<img src="https://library.ctext.org/s0140011/s0140011_0080.png" class="zoomable" referrerpolicy="no-referrer" style="max-width:300px"><img src="https://library.ctext.org/s0140011/s0140011_0081.png" class="zoomable" referrerpolicy="no-referrer" style="max-width:300px">`, bookSource: "《尚書正義五》" 
+        },
+        { 
+            char: "𡺈", structure: "⿰山音", mainFont: "tw-ext-b", pinyin: `<span class="vn-roman">pòu</span>`, reading: `ㄆㄡˋ`, 
+            definition: `「<span class="tw-ext-b">𡺈</span>嶁」：小山也。《新撰字鏡》：「<span class="tw-ext-b">𡺈</span>，薄口反，上。<span class="tw-ext-b">𡺈</span>嶁。」、《王仁昫刋謬補缺切韻一‧卷第三》：「<span class="tw-kai-98">㟝</span>嶁，小垛。」（<span class="tw-kai-98">蒱</span>口反）`, 
+            bookSource: "《新撰字鏡》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55014004650_2e60b0dd84_z.jpg" class="zoomable" style="max-width:320px"><span class="book-source-text" style="margin-top:15px; display:block;">國立北平故宮博物院出版《唐寫本王仁昫刋謬補缺切韻》</span><img src="https://live.staticflickr.com/65535/55013695951_61e0d608fc_z.jpg" class="zoomable" style="max-width:320px">`
+        },
+        { 
+            char: "𪚣", structure: "⿱殸龍", mainFont: "tw-ext-b", pinyin: `<span class="vn-roman">lǒng</span>`, reading: `ㄌㄨㄥˇ`, 
+            definition: `鬼名。丙戌日鬼。《道要靈祇神鬼品經》：「丙戌日鬼，名<span class="tw-ext-b">𪚣</span>狼董切。」`, 
+            bookImg: `<img src="https://library.ctext.org/s2350875/s2350875_0150.png" class="zoomable" referrerpolicy="no-referrer" style="max-width:350px">`, bookSource: "《道要靈祇神鬼品經》" 
+        },
+        { 
+            char: zhao_img, 
+            structure: "⿰崔刂", 
+            mainFont: "", 
+            pinyin: `<span class="vn-roman">zhāo</span>`, 
+            reading: `ㄓㄠ`, 
+            definition: `「<span class="def-inline-flickr">${zhao_img}</span>昌」：鬼名。丙寅日鬼。《道要靈祇神鬼品經》：「丙寅日鬼，名<span class="def-inline-flickr">${zhao_img}</span>音昭昌。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://library.ctext.org/s2350875/s2350875_0148.png" class="zoomable" referrerpolicy="no-referrer" style="max-width:350px">`
+        },
+        { 
+            char: wan_img, 
+            structure: "⿷辶玩", 
+            mainFont: "", 
+            pinyin: `<span class="vn-roman">wán</span>`, 
+            reading: `ㄨㄢˊ`, 
+            definition: `「<span class="def-inline-flickr">${wan_img}</span>」：鬼名。乙亥日鬼。《道要靈祇神鬼品經》：「乙亥日鬼，名<span class="def-inline-flickr">${wan_img}</span>。五官切。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://library.ctext.org/s2350875/s2350875_0149.png" class="zoomable" referrerpolicy="no-referrer" style="max-width:350px">`
+        },
+        { 
+            char: "𲎿",  structure: "⿰㐅也", 
+            mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">tā</span>`,  reading: `ㄊㄚ`, 
+            definition: `非二元性別認同的跨性別人士的第三人稱。`, 
+            bookSource: `香港《性別空間2018-2019年度報告》`,
+            bookImg: `<img src="https://live.staticflickr.com/65535/55041327502_641fcd1017_z.jpg" class="zoomable" style="max-width:320px">`
+        },
+        { 
+            char: "𲏀", structure: "⿱𠂝丶", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">zhòng</span>`,  reading: `ㄓㄨㄥˋ`, 
+            definition: `「<span class="wen-jin-text">𲏀</span>」為「眾」之異體。`, 
+            bookSource: `《中華字海．丿部》；<span class="vn-roman"><i>Chinese-English pocket dictionary with Mandarin and Shanghai pronunciation</i></span>`,
+            bookImg: `<img src="https://live.staticflickr.com/65535/55042587835_e5da7557d1_z.jpg" class="zoomable" style="max-width:320px"><img src="https://live.staticflickr.com/65535/55041349217_9e5edf5139_z.jpg" class="zoomable" style="max-width:320px">`
+        },
+        { 
+            char: "𲏁", structure: "⿱乃卞", 
+            mainFont: "nom-text", 
+            pinyin: `<span class="vn-roman">n/a</span>（越南語：<span class="vn-roman">bèn</span>）`, 
+            reading: `<span class="vn-roman">n/a</span>（越南語：<span class="vn-roman">bèn</span>）`, 
+            definition: `《詩經大全節要演義<span class="vn-roman">(Thi kinh đại toàn tiết yếu diễn nghĩa.)</span>》<span class="nom-text">：「𲏁𱺵蒸㗂丐蠅撑」</span><span class="vn-roman">( Bèn là chưng tiếng cái nhặng xanh.)</span><br>「翻譯：於是，（這一切）都是因為那綠頭蒼蠅的嗡嗡聲。」`, 
+            bookSource: `喃產遺存保會`,
+            bookImg: `<img src="https://hc.jsecs.org/irg/ws2021/data/v-evidence/VN-F163E.jpg" class="zoomable" style="max-width:320px">`
+        },
+        { 
+            char: "𲏂", structure: "⿰⿸丅〢⿱厶亅", mainFont: "nom-text",
+            pinyin: `<span class="vn-roman">suǒ</span>`, 
+            reading: `ㄙㄨㄛˇ`, 
+            definition: `「所」之喃字。<br><span class="vn-roman">Nơi chốn: Công sở (văn phòng chính phủ)<br></span>（翻譯：表示「場所、地點」。場所。（此指政府辦公室、辦公機關））；<br><span class="vn-roman">Trú sở (nơi ở)</span>（翻譯：住所。（居住的地方、駐地））；<br><span class="vn-roman">Từ giúp đếm các nơi chốn</span>（翻譯：作為計量處所的「量詞」。）<br><span class="vn-roman">Nhất sở phòng tử (một cái buồng)</span>（翻譯：一所房子。即一間房子）；<br><span class="vn-roman">Của mình</span>（翻譯：表示「所有、屬於自己的」。）<br><span class="vn-roman">Sở hữu</span>（翻譯：所有）、<span class="vn-roman">Sở quyền</span>（翻譯：所有權）；<br><span class="vn-roman">Cụm từ</span>（翻譯：固定片語）<br><span class="vn-roman">Sở dĩ (có việc ấy... là vì)</span>（翻譯：所以、之所以。表「之所以有那件事，是因為……。」）`, 
+            bookImg: `<img src="https://hc.jsecs.org/irg/ws2021/data/v-evidence/VN-F000F.jpg" class="zoomable" style="max-width:320px">`, bookSource: "喃產遺存保會" 
+        },
+        { 
+            char: "𲏃", 
+            structure: "⿻千𠈌", 
+            mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">chuí</span>`, 
+            reading: `ㄔㄨㄟˊ`, 
+            definition: `「垂」之異體。`, 
+            bookSource: `<span class="vn-roman"><i>Chinese-English pocket dictionary with Mandarin and Shanghai pronuncation</i></span><br>（漢英袖珍詞典，附普通話和上海話發音，並參考威廉姆斯和吉爾斯詞典）`,
+            bookImg: `<img src="https://live.staticflickr.com/65535/55042464873_40fa5ecfc6_z.jpg" class="zoomable" style="max-width:320px">`
+        },
+       { 
+            char: "󿫣", structure: "⿷九永", mainFont: "tw-plus-98", 
+            pinyin: `<span class="vn-roman">yǒng</span>`, reading: `ㄩㄥˇ`, 
+            definition: `人名。朴斗<span class="tw-plus-98">󿫣</span> 。《承政院日記‧肅宗‧二十八年‧六月》：「監役官朴斗<span class="tw-plus-98">󿫣</span> 。」`, 
+            bookSource: "《承政院日記‧肅宗‧二十八年‧六月》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55042508758_e40d139cf7_z.jpg" class="zoomable" style="max-width:320px">` 
+        },
+        { 
+            char: "𬊏", structure: "⿱旳灬", mainFont: "tw-ext-b", 
+            pinyin: "ㄒㄩˇ", reading: "xǔ", 
+            definition: `「煦」之異體。人名。義天禪師，俗名王煦。《立齋遺稿‧卷九‧高麗》：「王弟釋<span class="tw-ext-b">𬊏</span>死。」（據《東史綱目‧第七下 肅宗上》，則是寫：「九月，王弟釋煦死。」，再據韓國古籍綜合資料庫（<span class="nanum-text">한국고전종합</span><span class="vn-roman">DB</span>）所注之：「按。煦字義天。入宋。避哲宗諱。以字行。」綜上所得為「煦」之異體。）`, 
+            bookSource: "《立齋遺稿‧卷九‧高麗》",
+            /* 修正：更換清晰圖源，並將書影預覽加大至 550px，確保參考文獻清晰 */
+            bookImg: `<img src="https://live.staticflickr.com/65535/55042600164_7e13ea889d_z.jpg" class="zoomable" style="max-width:550px"><span class="book-source-text" style="margin-top:15px; display:block;">《東史綱目‧第七下 肅宗上》</span><img src="https://live.staticflickr.com/65535/55090948792_be5859a80a_z.jpg" class="zoomable" style="max-width:550px"><span class="book-source-text" style="margin-top:15px; display:block;">韓國古籍綜合資料庫</span><img src="https://live.staticflickr.com/65535/55091833291_ab95f17ba2_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "󿧿", 
+            structure: "⿱艹卜", mainFont: "tw-plus-98", 
+            pinyin: `<span class="vn-roman">bǔ</span>`, reading: `ㄅㄨˇ`, 
+            definition: `化學名詞。<span class="tw-plus-98">󿧿</span>基（<span class="vn-roman">pleiadenyl</span>）。有機化合物之基。化學式<span class="vn-roman">C<sub>18</sub>H<sub>11</sub>－</span>。`, 
+            bookSource: "《化學命名原則（第四版）》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55041460862_c29cc4150b_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𱽝", structure: "⿱艹丢", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">diū</span>`, reading: `ㄉㄧㄡ`, 
+            definition: `化學名詞。<span class="tw-ext-b">𱽝</span>基（<span class="vn-roman">thujyl</span>）。有機化合物之基。化學式<span class="vn-roman">C<sub>10</sub>H<sub>17</sub>－</span>。`, 
+            bookSource: "《化學命名原則（第四版）》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55042529428_f5827d4e60_z.jpg" class="zoomable" style="max-width:320px">` 
+        },
+        { 
+            char: "𱽥", structure: "⿱艹米", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">mǐ</span>`, reading: `ㄇㄧˇ`, 
+            definition: `化學名詞。<span class="vn-roman">mesitylene</span>。有機化合物。化學式<span class="vn-roman">(CH<sub>3</sub>)<sub>3</sub>C<sub>6</sub>H<sub>3</sub></span>。`, 
+            bookSource: "《化學命名原則（第四版）》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55042601073_3143b94bf8_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲆩", structure: "⿰酉公", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">sōng</span>`, reading: `ㄙㄨㄥ`, 
+            definition: `化學名詞。果<span class="tw-ext-b">𲆩</span>（<span class="vn-roman">fructosone</span>）。有機化合物。化學式<span class="vn-roman">C<sub>6</sub>H<sub>10</sub>O<sub>6</sub></span>。`, 
+            bookSource: "《化學命名原則（第四版）》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55042617008_fb190170f6_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲆰", structure: "⿰酉易", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">xí</span>`, reading: `ㄒㄧˊ`, 
+            definition: `化學名詞。甲<span class="tw-ext-b">𲆰</span>酸（<span class="vn-roman">methanestannonic acid</span>）。有機化合物。化學式<span class="vn-roman">CH<sub>3</sub>SnOOH</span>。`, 
+            bookSource: "《化學命名原則（第四版）》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55042617008_fb190170f6_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲆱", structure: "⿰酉朋", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">péng</span>`, reading: `ㄆㄥˊ`, 
+            definition: `化學名詞。<span class="tw-ext-b">𲆱</span>酸（<span class="vn-roman">boric acid</span>）。有機化合物。化學式<span class="vn-roman">H<sub>3</sub>BO<sub>3</sub></span>。`, 
+            bookSource: "《化學命名原則（第四版）》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55042617008_fb190170f6_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲆳", structure: "⿰酉品", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">pǐn</span>`, reading: `ㄆㄧㄣˇ`, 
+            definition: `化學名詞。<span class="vn-roman">pinacol</span>。有機化合物。化學式<span class="vn-roman">C<sub>6</sub>H<sub>14</sub>O<sub>2</sub></span>。`, 
+            bookSource: "《化學命名原則（第四版）》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55042617008_fb190170f6_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲇙", structure: "⿰金臭", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">xiù</span>`, reading: `ㄒㄧㄡˋ`, 
+            definition: `化學名詞。<span class="vn-roman">bromonium</span>。有機化合物。化學式<span class="vn-roman">H<sub>2</sub>Br+</span>。`, 
+            bookSource: "《化學命名原則（第四版）》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55042617008_fb190170f6_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "󿫾", structure: "⿰忄別", mainFont: "tw-plus-98", 
+            pinyin: `（一）<span class="vn-roman">n/a</span>（臺灣台語<span class="vn-roman">bat（pat）</span>）（二）<span class="vn-roman">n/a</span>（擬音<span class="vn-roman">[ʔit8]</span>）`, 
+            reading: `（一）<span class="vn-roman">n/a</span> （臺灣台語<span class="vn-roman">bat（pat）</span>）（二）<span class="vn-roman">n/a</span>（擬音<span class="vn-roman">[ʔit8]</span>）`, 
+            definition: `（一）<span class="vn-roman">n/a</span>。<br>臺灣台語用字。懂、知道、明白；認識；曾經。（舊用字「捌」）。<br>（二）<span class="vn-roman">n/a</span>。<br>喃字。`, 
+            bookSource: "全字庫",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55042479046_2c8a8cc2b8_z.jpg" class="zoomable" style="max-width:550px"><span class="book-source-text" style="margin-top:15px; display:block;">《中國京語詞典》</span><img src="https://hc.jsecs.org/irg/ws2024/data/v-evidence/VN-F1FC8.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "󿬌", structure: "⿱宀好", mainFont: "tw-plus-98", 
+            pinyin: `<span class="vn-roman">jiā</span>`, reading: `ㄐㄧㄚ`, 
+            definition: `臺灣台語用字。家庭；尊稱自己的長輩；尊稱學有專長的人；與家庭有關的；表單位、商店或團體；表派別。（舊用字「家」）。`, 
+            bookSource: "全字庫",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55042490611_984ae94898_z.jpg" class="zoomable" style="max-width:550px"><span class="book-source-text" style="margin-top:15px; display:block;">《拾萬字鏡難字盡》</span><img src="https://live.staticflickr.com/65535/55042667668_bc7aff1a92_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "󿬋", structure: "⿱我心", mainFont: "tw-plus-98", 
+            pinyin: `（一）<span class="vn-roman">n/a</span> （臺灣台語<span class="vn-roman">guán</span>）（二）<span class="vn-roman">n/a</span>（臺灣台語<span class="vn-roman">gún</span>）（三）<span class="vn-roman">yí</span>`, 
+            reading: `（一）<span class="vn-roman">n/a</span> （臺灣台語<span class="vn-roman">guán</span>）（二）<span class="vn-roman">n/a</span> （臺灣台語<span class="vn-roman">gún</span>）（三）ㄧˊ`, 
+            definition: `（一）<span class="vn-roman">guán</span><br>臺灣台語用字。我們。第一人稱複數代名詞。「咱」(<span class="vn-roman">lán</span>)包括聽話者，「阮」(<span class="vn-roman">guán</span>)不包括聽話者；我。第一人稱單數代名詞。多為女性自稱，帶有撒嬌意味，也常說成「人阮（<span class="vn-roman">lâng guán）</span>」；我的。第一人稱單數所有格。（舊用字「阮」）。<br>（二）<span class="vn-roman">gún</span><br>（一）之又音。<br>（三）ㄧˊ<br>「儀」之異體。為楚簡隸定字。`, 
+            bookSource: "全字庫",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55041608292_b965d0bfa8_z.jpg" class="zoomable" style="max-width:550px"><span class="book-source-text" style="margin-top:15px; display:block;">《郭店楚墓竹簡》</span><img src="https://live.staticflickr.com/65535/55042500096_752dde52a8_z.jpg" class="zoomable" style="max-width:550px"><img src="https://live.staticflickr.com/65535/55041598612_fce2fb66c9_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𬏛", structure: "⿸疒才", mainFont: "tw-ext-b", 
+            pinyin: `（一）<span class="vn-roman">cù</span> （二）<span class="vn-roman">n/a</span>（臺灣客語<span class="vn-roman">coǐ</span>）`, 
+            reading: `（一）ㄘㄨˋ （二）<span class="vn-roman">n/a</span>（臺灣客語<span class="vn-roman">coǐ</span>）`, 
+            definition: `（一）ㄘㄨˋ<br>且鹿反。皮毛不疥癬也，<span class="wen-jin-text">𱱯</span>也。<br>（二）ㄘㄞˊ<br>臺灣客語用字。瘡。`, 
+            bookSource: "《新撰字鏡》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55044744977_8927ffb526_z.jpg" class="zoomable" style="max-width:550px"><span class="book-source-text" style="margin-top:15px; display:block;">全字庫</span><img src="https://live.staticflickr.com/65535/55045820543_7b0b7cc6b4_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "󿬛", structure: "⿰勿愛", mainFont: "tw-plus-98", 
+            pinyin: `<span class="vn-roman">n/a</span>（臺灣台語<span class="vn-roman">mài</span>）`, reading: `<span class="vn-roman">n/a</span>（臺灣台語<span class="vn-roman">mài</span>）`, 
+            definition: `臺灣台語用字。不要。表示禁止或勸阻之意。（舊用字「莫」）。`, 
+            bookSource: "《現代漢語方言大詞典》",
+            bookImg: `<img src="https://hc.jsecs.org/irg/ws2021/data/uk-evidence/UK-20529-001.jpg" class="zoomable" style="max-width:550px"><span class="book-source-text" style="margin-top:15px; display:block;">全字庫</span><img src="https://live.staticflickr.com/65535/55045648926_67e24d3eba_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "󿬙", structure: "⿰耳休", mainFont: "tw-plus-98", 
+            pinyin: `<span class="vn-roman">n/a</span>（臺灣客語<span class="vn-roman">hio</span>）`, reading: `<span class="vn-roman">n/a</span>（臺灣客語<span class="vn-roman">hio</span>）`, 
+            definition: `臺灣客語用字。「耳<span class="tw-plus-98">󿬙󿬙</span>」：聽覺不靈敏，有點耳聾的樣子；充耳不聞的樣子。形容人故意不理會或不願聽取別人的意見。`, 
+            bookSource: "《臺灣客語辭典》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55045840978_5bac0b4b4c_z.jpg" class="zoomable" style="max-width:550px"><span class="book-source-text" style="margin-top:15px; display:block;">全字庫</span><img src="https://live.staticflickr.com/65535/55077725704_88a999c460_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+       { 
+            char: "𲭡", structure: "⿰牛周", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">n/a</span>（臺灣台語<span class="vn-roman">tiâu</span>）`, reading: `<span class="vn-roman">n/a</span>（臺灣台語<span class="vn-roman">tiâu</span>）`, 
+            definition: `臺灣台語用字。飼養牲畜的地方；間。計算牲口圈養房舍的單位；附著、沾黏；緊密結合分不開；染上癮頭；錄取、考取；被東西卡住，無法動彈。（舊用字「牢」）。`, 
+            bookSource: `<span class="vn-roman"><i>Taiwanese Han Character Bible</i></span> （巴克禮台語漢字聖經）`,
+            bookImg: `<img src="https://hc.jsecs.org/irg/ws2021/data/utc-evidence/UTC-03196.png" class="zoomable" style="max-width:550px"><span class="book-source-text" style="margin-top:15px; display:block;">全字庫</span><img src="https://live.staticflickr.com/65535/55045667096_1023bfe513_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+       { 
+            char: "𱟛", structure: "⿳⿲日<span class=\"tw-kai-98\">䜌</span>干⿲脹𮪉戈心", 
+            mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">liàn</span>`, reading: `ㄌㄧㄢˋ`, 
+            definition: `「戀」之異體。`, 
+            bookSource: "《潮汕十八音字典 普通話對照》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55046076295_71b758aa81_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𢣱", structure: "⿱𣗥心", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">fèi</span>`, reading: `ㄈㄟˋ`, 
+            definition: `鬼名。辛卯日鬼。《道要靈祇神鬼品經》：「辛卯日鬼，名<span class="tw-ext-b">𢣱</span>扶北切。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55047148481_383a0d40a0_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𨖩", structure: "⿺辶眷", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">quán</span>`, reading: `ㄑㄩㄢˊ`, 
+            definition: `<span class="tw-ext-b">𨖩</span>夫：鬼名。壬戌日鬼。《道要靈祇神鬼品經》：「壬戌日鬼，名<span class="tw-ext-b">𨖩</span>（⿺辶眷）夫音拳。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55047422074_094cbc177e_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𨑺", structure: "⿺辶毛", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">máo</span>`, reading: `ㄇㄠˊ`, 
+            definition: `遐<span class="tw-ext-b">𨑺</span>：鬼名。百蟲之鬼。《道要靈祇神鬼品經》：「百蟲之鬼，名遐<span class="tw-ext-b">𨑺</span>莫號切。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55047508070_bf6bbaef18_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𠋙", structure: "⿰俠刂", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">qī</span>`, reading: `ㄑㄧ`, 
+            definition: `<span class="tw-ext-b">𠋙</span>石圭：鬼名。虵精之鬼。《道要靈祇神鬼品經》：「虵精之鬼，名<span class="tw-ext-b">𠋙</span>音戚石圭。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55047436774_498383b9a4_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: liji_img, structure: "⿱立即", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">zhuó</span>`, reading: `ㄓㄨㄛˊ`, 
+            definition: `石<span class="def-inline-flickr">${liji_img}</span>：鬼名。丁亥日鬼。《道要靈祇神鬼品經》：「丁亥日鬼，名石<span class="def-inline-flickr">${liji_img}</span>之蛇切。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55047443809_790ef416f0_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: kao_img, structure: "⿱劫矣", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">qià</span>`, reading: `ㄑㄧㄚˋ`, 
+            definition: `鬼名。壬辰日鬼。《道要靈祇神鬼品經》：「壬辰日鬼，名<span class="def-inline-flickr">${kao_img}</span>苦黠切。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55047395123_69ca456511_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: yi_img, structure: "⿺辶氏", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">yǐ</span>`, reading: `ㄧˇ`, 
+            definition: `鬼名。辛卯日鬼。《道要靈祇神鬼品經》：「辛丑日鬼，名<span class="def-inline-flickr">${yi_img}</span>以是切。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55046327382_03c9f982ee_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: ti_img, structure: "⿺辶雉", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">tì</span>`, reading: `ㄊㄧˋ`, 
+            definition: `鬼名。丙辰日鬼。《道要靈祇神鬼品經》：「丙辰日鬼，名<span class="def-inline-flickr">${ti_img}</span>他計切。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55047232211_34eaf45a2b_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: ben_img, structure: "⿺辶夲", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">běn</span>`, reading: `ㄅㄣˇ`, 
+            definition: `耳<span class="def-inline-flickr">${ben_img}</span>：鬼名。戊午日鬼。《道要靈祇神鬼品經》：「戊午日鬼，名耳<span class="def-inline-flickr">${ben_img}</span>音本。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55047240471_7c13f3fc74_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: da_img, structure: "⿺辶荅", mainFont: "", 
+            pinyin: `<span class="vn-roman">dá</span>`, reading: `ㄉㄚˊ`, 
+            definition: `<span class="def-inline-flickr">${da_img}</span>高敵：鬼名。癸亥日鬼。《道要靈祇神鬼品經》：「癸亥日鬼，名<span class="def-inline-flickr">${da_img}</span>都臘切高敵。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55046352142_9b3f3aac36_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: shuo_img, structure: "⿲口十口", mainFont: "", 
+            pinyin: `<span class="vn-roman">shuò</span>`, reading: `ㄕㄨㄛˋ`, 
+            definition: `「耳禽」：鬼名。戟<span class="def-inline-flickr">${shuo_img}</span>之鬼。《道要靈祇神鬼品經》：「戟<span class="def-inline-flickr">${shuo_img}</span>音搠之鬼，名耳禽。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55047599035_31030acb23_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: zhuan_img, structure: "⿺辶轉", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">zhuàn</span>`, reading: `ㄓㄨㄢˋ`, 
+            definition: `方<span class="def-inline-flickr">${zhuan_img}</span>：鬼名。世間癲癇煞人之鬼。《道要靈祇神鬼品經》：「塵發汱洉、若無盱、方<span class="def-inline-flickr">${zhuan_img}</span>陟戀。右三鬼是世間癲癇煞人之鬼，其赤衣服烏冠，<span class="tw-kai-98">㥽</span>主收人魂子知其名有疾，即差鬼不敢干。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55046372777_763ca91ba3_z.jpg" class="zoomable" style="max-width:550px"><img src="https://live.staticflickr.com/65535/55047291531_79258e3972_z.jpg" class="zoomable" style="max-width:550px">`
+        },
+        { 
+            char: yi_img_2, structure: "⿺⿱辶異貝", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">yì</span>`, reading: `ㄧˋ`, 
+            definition: `「敬<span class="def-inline-flickr">${yi_img_2}</span>」：鬼名。能造成難產的鬼。《道要靈祇神鬼品經》：「語忘、敬<span class="def-inline-flickr">${yi_img_2}</span>唯鼻切。右此二鬼，主女臨產，女子產生時，不可不呼此鬼名，即不害人鬼。長三寸三分，上下烏衣。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55047291531_79258e3972_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: lei_img, structure: "⿺辶壘", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">léi</span>`, reading: `ㄌㄟˊ`, 
+            definition: `「遼進<span class="def-inline-flickr">${lei_img}</span>」：鬼名。能造成人失財子的鬼。《道要靈祇神鬼品經》：「遼進<span class="def-inline-flickr">${lei_img}</span>立追切、百逍。右二鬼是旦夕掃除鬼，令人失財子，知名可月日平旦，向西北三呼名，呪曰：『石未子，石未子，太一汝爲我使何物，逆鬼令速出』。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55047721260_e6cf99791e_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: bian_img, structure: "⿱厶下", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">biàn</span>`, reading: `ㄅㄧㄢˋ`, 
+            definition: `傳<span class="def-inline-flickr">${bian_img}</span>：鬼名。己巳日鬼。《道要靈祇神鬼品經》：「己巳日鬼，名傳直專切<span class="def-inline-flickr">${bian_img}</span>扶變切。」`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55046503452_28ec19d127_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: youye_img, structure: "⿰有頁", mainFont: "tw-ext-b", 
+            pinyin: "待考", reading: "待考", 
+            definition: `「醫<span class="def-inline-flickr">${youye_img}</span>」：鬼名。鐵精之鬼。《道要靈祇神鬼品經》：「鐵精之鬼，名醫<span class="def-inline-flickr">${youye_img}</span>。」。`, 
+            bookSource: "《道要靈祇神鬼品經》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55047436774_498383b9a4_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𨁙", structure: "⿰足免", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">miǎn</span>`, reading: `ㄇㄧㄢˇ`, 
+            definition: `「勉」之異體。《通志堂經解》：「勉聞道。崔向云：『勉強也。本或作<span class="tw-ext-b">𨁙</span>』。」`, 
+            bookSource: "《通志堂經解》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55047603643_872a32cab9_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𤇽", structure: "⿰火戎", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">xì</span>`, reading: `ㄒㄧˋ`, 
+            definition: `狂也；怒也。《字彙》：「<span class="tw-ext-b">𤇽</span>，休筆切。熏入聲。狂也。齊人語。一曰：怒也。」`, 
+            bookSource: "《字彙》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55047765410_c7d43242de_z.jpg" class="zoomable" style="max-width:320px"><img src="https://live.staticflickr.com/65535/55046525547_096af69e59_z.jpg" class="zoomable" style="max-width:320px">` 
+        },
+        { 
+            char: "𥿕", structure: "⿰糹占", mainFont: "tw-ext-b", 
+            pinyin: `（一）<span class="vn-roman">juà</span>或<span class="vn-roman">xiān</span>（二）<span class="vn-roman">n/a</span>（越南語：<span class="vn-roman">chiếm</span>）`, 
+            reading: `（一）ㄐㄩㄢˋ或ㄒㄧㄢ（二）<span class="vn-roman">n/a</span>（越南語：<span class="vn-roman">chiếm</span>）`, 
+            definition: `（一）ㄐㄩㄢˋ或ㄒㄧㄢ<br>為「絹」或「纖」的楚簡隸定字。《楚地出土戰國簡冊合集（四）‧望山楚墓竹簡‧二號墓竹簡（遺冊）》：「『丹<span class="tw-kai-98">䋺</span>之<span class="def-inline-flickr">${shi_img}</span>安，生之<span class="tw-ext-b">𥿕</span>裏。』其中<span class="def-inline-flickr">${shi_img}</span>有二說：釋為『軾』，或『<span class="tw-ext-b">𫏳</span>』，讀為『車』。<span class="tw-ext-b">𥿕</span>，整理者認為：疑當讀為『纖』。《方言》卷二：『繒帛之細者謂之纖。』；李運富：『<span class="tw-ext-b">𥿕</span>即絹，前者可能是後者的省體，也可以當成另從占聲的同符異構字。』；程燕：『<span class="tw-ext-b">𥿕</span>當為絹的省文。占與肙聲韻均不合。』」<br>（二）ㄑㄧㄢˊ<br>聚攏。《國音詩集（<span class="vn-roman">Quốc âm thi tập</span>）》<span class="nom-text">：「𥿕自然𦫼蔑間 𢷀 空汰汰糁紅塵</span>」（<span class="vn-roman">Chụm tự nhiên lều một căn. Giũ không thảy thảy tấm hồng trần.</span>）<br>翻譯：自然聚攏起一間茅廬，抖落紅塵一絲不留。`, 
+            bookSource: `《楚地出土戰國簡冊合集（四）‧望山楚墓竹簡‧二號墓竹簡（遺冊）》`,
+            bookImg: `<img src="https://live.staticflickr.com/65535/55047445046_4d44aa86b3_z.jpg" class="zoomable" style="max-width:320px"><img src="https://live.staticflickr.com/65535/55047636028_351c019ebd_z.jpg" class="zoomable" style="max-width:320px">喃産遺存保會<img src="https://live.staticflickr.com/65535/55047713104_4e749cdb6c_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "杣", structure: "⿰木山", mainFont: "", 
+            pinyin: `<span class="vn-roman">mián</span>`, reading: `ㄇㄧㄢˊ`, 
+            definition: `1、「<span class="tw-ext-b">𣞌</span>」、「<span class="tw-ext-b">𣏜</span>」之異體。《漢語大字典》：「《農政全書‧製造‧營室》：『嘗見往年腹裏諸郡，居瓦屋則用磚裹杣簷，草屋則用泥圬上下。』石聲漢校注：『杣，疑是<span class="tw-ext-b">𣞌</span>的或體<span class="tw-ext-b">𣏜</span>，即屋簷前横釘的望板。』」<br>2、指「出產木材的山」或「從山上砍伐下來的木材」。常用詞彙：杣人（そまびと）： 樵夫、伐木工（也寫作「きこり」）；杣木（そまき）： 從山上砍伐的木材；杣山（そまやま）： 種植植林、用來生產木材的山；杣匠（そまだくみ）： 木匠、伐木師傅。（《和製漢字の辞典》）`, 
+            bookSource: "《漢語大字典》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55047770134_2d8c861df8_z.jpg" class="zoomable" style="max-width:550px">《和製漢字の辞典》<img src="https://live.staticflickr.com/65535/55049562955_f3582acf2c_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𢩳", structure: "⿰扌山", mainFont: "tw-ext-b", 
+            pinyin: `（一）<span class="vn-roman">shàn</span>（二）<span class="vn-roman">tuī</span>（三）<span class="vn-roman">zǎn</span>（四）<span class="vn-roman">mián</span>（五）<span class="vn-roman">sn/a</span>（越南語：<span class="vn-roman">san</span>）`, 
+            reading: `（一）ㄕㄢˋ（二）ㄊㄨㄟ（三）ㄗㄢˇ（四）ㄇㄧㄢˊ（五）<span class="vn-roman">n/a</span>（越南語：<span class="vn-roman">san</span>）`, 
+            definition: `（一）ㄕㄢˋ<br>二簡字。為「擅」之二簡字。《第二次漢字簡化方案（草案）》。<br>（二）ㄊㄨㄟ<br>推出，為中指向外斜推撥一弦。減字譜中以<span class="tw-ext-b">𢩳</span>當作符號。《神奇秘譜樂詮》：「推出，中指向外斜推撥一弦。」<br>（三）ㄗㄢˇ<br>通「拶」。一種古代刑罰。以木條用力夾指。《明清小說俗字典》：「<span class="tw-ext-b">𢩳</span>。《集成》明刊本《詳情公案》卷二：許公曰：『既未偷鷄，緣何將草心搕短？從直招來，免得加<span class="tw-ext-b">𢩳</span>（拶）』。」<br>（四）ㄇㄧㄢˊ<br>「杣」之異體。《和製漢字の辞典2014》：「苗字に<span class="tw-ext-b">𢩳</span>友（そまとも）がある。国字「杣」の異體字か。」（翻譯：姓氏為𢩳友。國字「杣」的異體字）<br>（五）ㄙㄢ<br>1、中古越南語讀音：<span class="vn-roman">san</span>。造詞：<span class="nom-text">𢩳𢫟</span>。釋義：分享、表達。例句：<span class="nom-text">󰝂才情𢩳𢫟買紅顔</span>（<span class="vn-roman">Đem tài tình san sẻ với hồng nhan.</span>）<br>翻譯：與其他女性分享你的才華。<br>2、中古越南語讀音：<span class="vn-roman">săn</span>。造詞：<span class="nom-text">𢩳超</span>。釋義：依戀，纏綿。例句：<span class="nom-text">㐌停絲紙𱻊𢩳超 吏虎身尼分飲囂</span>（<span class="vn-roman">Đã đành tơ chỉ nghĩa săn siu. Lại hổ thân này phận hẩm hiu.</span>）<br>翻譯：既然已註定這份情意會像絲線般糾纏不休，又何必為自己這卑微的命運感到羞愧。`, 
+            bookSource: `《第二次漢字簡化方案（草案）》`,
+            bookImg: `<img src="https://live.staticflickr.com/65535/55046651967_337666923c_z.jpg" class="zoomable" style="max-width:320px">《神奇秘譜樂詮》<img src="https://live.staticflickr.com/65535/55047887575_70414c0cb7_z.jpg" class="zoomable" style="max-width:320px">《明清小說俗字典》<img src="https://live.staticflickr.com/65535/55047888965_60961fc0ff_z.jpg" class="zoomable" style="max-width:320px">《和製漢字の辞典2014》<img src="https://live.staticflickr.com/65535/55047890565_7350b3390d_z.jpg" class="zoomable" style="max-width:320px">喃産遺存保會<img src="https://live.staticflickr.com/65535/55047548081_2ce9b68892_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𱟜", structure: "⿰帚戈", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">qīn</span>`, reading: `ㄑㄧㄣ`, 
+            definition: `「侵」的楚簡隸定字。《戰國文字通論（訂補）》：「傳世小銅柱（《周金》6.132）銘文『<span class="def-inline-flickr">${fangxi_img}</span>室同，<span class="tw-kai-98">㦿</span>（戶）北直。者（旅）司（祠）西，埈（陖）<span class="wen-jin-text">𱟜</span>（侵）<span class="def-inline-flickr">${chuoling_img}</span>（陵）。』」`, 
+            bookSource: "《戰國文字通論（訂補）》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55049503848_25274e9b6f_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𨟭", structure: "⿰⿱𥫗膚阝", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">jǔ</span>`, reading: `ㄐㄩˇ`, 
+            definition: `「筥」的楚簡隸定字。《戰國文字通論（訂補）》：「<span class="tw-ext-b">𨟭</span>侯簋。」`, 
+            bookSource: "《戰國文字通論（訂補）》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55048548772_c7d00e2418_z.jpg" class="zoomable" style="max-width:550px"><br>《漢語大字典》<img src="https://live.staticflickr.com/65535/55049715479_5d6291ff6e_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "󺜮", structure: "⿰阝金", mainFont: "tw-plus-98", 
+            pinyin: `<span class="vn-roman">yīn</span>`, reading: `ㄧㄣ`, 
+            definition: `「陰」的楚簡隸定字。《戰國文字通論（訂補）》：「平<span class="tw-plus-98">𬯉</span>（陰）。」。`, 
+            bookSource: "《戰國文字通論（訂補）》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55048565972_4180b7e115_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𪤝", structure: "⿱陽土", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">yáng</span>`, reading: `ㄧㄤˊ`, 
+            definition: `「陽」的楚簡隸定字。《戰國文字通論（訂補）》：「平<span class="tw-ext-b">𪤝</span>（陽）高馬里鈛（戈）」、「成<span class="tw-ext-b">𪤝</span>（陽）辛城里鈛（戈）」。`, 
+            bookSource: "《戰國文字通論（訂補）》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55049823770_f6a8ef2055_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𤂼", structure: "⿱⿰自家水", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">yào</span>`, reading: `ㄧㄠˋ`, 
+            definition: `自己口中津液。《〈亳州老君碑古字譜〉考釋》：「《漢語大字典》注：『道教專用字，指自己口中津液。』《改併四聲篇海・水部》引《俗字背篇》:『<span class="tw-ext-b">𤂼</span>，太上作』，張道忠添注：『从自从家从水為<span class="tw-ext-b">𤂼</span>，與藥同音，使用有殊。自家水者，是人人各自口中津液也。』《仙經》云：『華池神，流入淵波』、『是也……若人恒常吞咽津液，自然壽長也。』《字彙・水部》：『<span class="tw-ext-b">𤂼</span>，見《太上老君碑》。』自家水，即人體之津液、精液，乃為內丹的元素、源泉。《悟真篇》云：『人人本有長生藥，只是迷途枉自拋。甘露降時天地合，黃芽生處坎離交。』氣功武術，皆以『漱浸功』、『浸常咽』和節性慾為健身要旨。有人說『活』字由「舌、水」組成，即示口內津液之作用。故以自、家、水為『藥』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051459683_e53ce7afce_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲗌", structure: "⿰口⿸虍命", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">hū</span>`, reading: `ㄏㄨ`, 
+            definition: `用功呼虛靈真氣降至丹田命宮。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲗌</span>，从口，从虍，从命。呼吸雖由口出入，但應導引真氣的運行，真氣亦稱真炁，即虛靈不昧之氣，丹田即命宮，即方寸之寶地。故而用功呼虛靈真氣降至丹田命宮為『<span class="wen-jin-text">𲗌</span>』（呼）。 」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051642835_213571e25b_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲐠", structure: "⿰亻⿱𠤎天", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">qù</span>`, reading: `ㄑㄩˋ`, 
+            definition: `化、去。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲐠</span>，由人、𠤎、天組成，人、𠤎為『化』。道家內丹功有『尋天掘地見天光』之說。要用陰火去化地中天。地中天，即陰中真陽，使陰陽交合。故而『<span class="wen-jin-text">𲐠</span>』有化、去之意。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051569684_5742a686d5_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲖈", structure: "⿰口⿸虍令", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">xī</span>`, reading: `ㄒㄧ`, 
+            definition: `吸真炁提到玄關。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲖈</span>，从口，从虍，从令。乃方寸虛靈真炁，令一陽返本之象。『<span class="wen-jin-text">𲗌</span>』是呼真炁降至丹田，『<span class="wen-jin-text">𲖈</span>』為吸真炁提到玄關。呼去吸來，升降之理。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051658120_3500968015_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲚿", structure: "⿱天本", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">lái</span>`, reading: `ㄌㄞˊ`, 
+            definition: `天復本位。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲚿</span>，從天，從本。天復本位，即是回來。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051658120_3500968015_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲘠", structure: "⿴囗旡", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">xí</span>`, reading: `ㄒㄧˊ`, 
+            definition: `真息。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲘠</span>，以上說的呼吸，都指的真氣，並非鼻之呼吸，乃先天無形之真息。實則是元炁之運作。『<span class="wen-jin-text">𲘠</span>』，可視為囗中一炁，旡借為炁，即真息，故以『<span class="wen-jin-text">𲘠</span>』作『息』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051553018_53e62f55d3_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲛁", structure: "⿱大亨", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">yóu</span>`, reading: `ㄧㄡˊ`, 
+            definition: `周身大通，始可由我。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲛁</span>，由大、亨組成。初用功夫，周身陰濁，真炁不通，即不由我。久而運用，則周身大通，始可由我，故以『<span class="wen-jin-text">𲛁</span>』為『由』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051377556_a2286cf741_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲜳", structure: "⿸尸元", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">wǒ</span>`, reading: `ㄨㄛˇ`, 
+            definition: `真我。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲜳</span>，由尸、元組成。真炁不通，自身不是真我，只有身（尸）內之元神煉就，清虛法身，才是真我，真炁往來，無聲無形，故以『<span class="wen-jin-text">𲜳</span>』為『我』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𳃿", structure: "⿰身真", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">xìng</span>`, reading: `ㄒㄧㄥˋ`, 
+            definition: `真性。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𳃿</span>，由身、真組成。古經云：『有形有像皆是假，無影無形才是真。』無形乃是真性，故以『<span class="wen-jin-text">𳃿</span>』為『性』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲓲", structure: "⿱天卩", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">kōng</span>`, reading: `ㄎㄨㄥ`, 
+            definition: `太虛之空。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲓲</span>，从天，从卩。天字下面二畫，一直一彎，喻陰陽二氣，性命會合，乾坤貫滿，似乎頂天立地。練功既久，到無為之時，如坐太虛之空，故以『<span class="wen-jin-text">𲓲</span>』為『空』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲬍", structure: "⿰君⿱玄火", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">xīn</span>`, reading: `ㄒㄧㄣ`, 
+            definition: `道心。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲬍</span>，由君、玄、火組成。道教煉養，既要性空，又要心滅，方可無事無非，或曰滅凡心而存道心。凡心為火性，好勝好猛。玄為北，為水，乃北方玄天大帝。玄在心之上，可鎮壓邪火莫起。此為道心，真君子也。故以『<span class="wen-jin-text">𲬍</span>』為『心』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲩗", structure: "⿰氵⿱屯火", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">miè</span>`, reading: `ㄇㄧㄝˋ`, 
+            definition: `把心血之火用水屯住。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲩗</span>，由水、屯、火組成。把心血之火用水屯住，自然滅矣。是以先天滅後天，無象滅有像。故以『<span class="wen-jin-text">𲩗</span>』為『滅』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲘪", structure: "⿴囗神", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">běn</span>`, reading: `ㄅㄣˇ`, 
+            definition: `返本還原。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲘪</span>，由囗、神組成。囗表示無極宮，神為神炁，《丹經》云：『此竅非凡竅，乾坤共合成。名為神炁穴，內有坎離精。』既要性空心滅，就要按陰陽顛倒之理，將神炁收回無極宮中，即所謂『返本還原』。故以『<span class="wen-jin-text">𲘪</span>』為『本』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𧾿", structure: "⿰𧾷了", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">wú</span>`, reading: `ㄨˊ`, 
+            definition: `知足了。《〈亳州老君碑古字譜〉考釋》：「<span class="tw-ext-b">𧾿</span>，由足、了組成。既要性空心滅，返本還原，就應知足了，只有知足了，則可無欲、無貪、無為、無憂。故以足、了為『<span class="tw-ext-b">𧾿</span>』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲑽", structure: "⿱入塵", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">kàn</span>`, reading: `ㄎㄢˋ`, 
+            definition: `進入世事。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲑽</span>，由入、塵組成。修至無為之境，眼神再進入世事一看，無非名利酒色，乃為凡塵、紅塵，苦海無邊。入塵為『<span class="wen-jin-text">𲑽</span>』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𢚍", structure: "⿰忄⿱守一", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">jí</span>`, reading: `ㄐㄧˊ`, 
+            definition: `寂靜無躁。《〈亳州老君碑古字譜〉考釋》：「<span class="tw-ext-b">𢚍</span>，《漢語大字典》：同『<span class="tw-ext-b">𡧯</span>』（寂）。《字彙補‧心部》:『<span class="tw-ext-b">𢚍</span>，與<span class="tw-ext-b">𡧯</span>同。<span class="tw-ext-b">𡧯</span>，古寂字。』此字由心、守、一組成，心既守一，不為凡塵所擾，故而寂靜無躁。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𰑚", structure: "⿰忄守", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">jí</span>`, reading: `ㄐㄧˊ`, 
+            definition: `「<span class="tw-ext-b">𢚍</span>」之異體。據路迪民《〈亳州老君碑古字譜〉考釋》為「<span class="tw-ext-b">𢚍</span>」。`, 
+            bookSource: `古今文字集成〈亳州老君碑古字譜〉。<br>網址：<a href="https://archive.ph/xkOfl" target="_blank" class="vn-roman">https://archive.ph/xkOfl</a>`,
+            bookImg: `<img src="https://live.staticflickr.com/65535/55053240284_533f67d0bc_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𠍟", structure: "⿰侗弗", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">kě</span>`, reading: `ㄎㄜˇ`, 
+            definition: `與佛相同。《〈亳州老君碑古字譜〉考釋》：「《漢語大字典》：同『可』。《字彙補‧人部》：『<span class="tw-ext-b">𠍟</span>，與可同。涵虛子作。見《道經》。』此字由人、同、弗組成，乃人同佛也。前言所謂寂照，是體內大丹結就，光華透出祖竅，與日月同明，遠近共照，璇璣常轉，永勿停留。修行至此，與佛相同，就算可以了。故以『<span class="tw-ext-b">𠍟</span>』為『可』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲹂", structure: "⿱罒⿰肖光", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">huān</span>`, reading: `ㄏㄨㄢ`, 
+            definition: `喜悅常歡。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲹂</span>，由罒、肖、光組成。既然到了人同佛之境，則罒肖放光華。肖，借為霄，天空也。功夫到了此步，豈不喜悅常歡，故以『<span class="wen-jin-text">𲹂</span>』為『歡』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲺸", structure: "⿰月窗", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">wàng</span>`, reading: `ㄨㄤˋ`, 
+            definition: `忘卻。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲺸</span>，由月、窗組成，實則是『腦』字去掉『巛』換成『穴』。『腦』字中的『巛』六畫，比喻人的六慾。『穴』為空字頭，空字頭佔據了六慾的位置，即為『忘』字，忘卻七情六慾。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲜯", structure: "⿱幻京", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">huàn</span>`, reading: `ㄏㄨㄢˋ`, 
+            definition: `紅塵景色。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲜯</span>，由幻、京組成。幻者，空也；京，借為景。看透紅塵世事，即為幻景。此「<span class="wen-jin-text">𲜯</span>』為幻，非幻想之幻，乃道者之紅塵景色也。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𣔉", structure: "⿱木非", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">wǒ</span>`, reading: `ㄨㄛˇ`, 
+            definition: `人間之我。《〈亳州老君碑古字譜〉考釋》：「<span class="tw-ext-b">𣔉</span>，由木、非組成，實指『十八非』。道教認為人生不明理時，身帶十惡八邪，即十八非。不知是非，不知誰是我，亦不知我是誰，『來時糊塗去時迷，空在人間走一回』。若得道法，即將人間之我視為十八非，故以「<span class="tw-ext-b">𣔉</span>」為『我』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲾉", structure: "⿰虛覺", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">wèi</span>`, reading: `ㄨㄟˋ`, 
+            definition: `虛心求得見識，達到自覺為目的。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲾉</span>，由虛、覺组成。虛者，虛靈、虛心也；覺者，覺悟也，或為學而見也。『覺』為<span class="tw-ext-b">𦥯</span>字頭下面一個見字，人被物慾所蔽，不虛不靈，亦不能覺。得法之人，虛心受教，認真學習，方能有見識。此字以虛心求得見識，達到自覺為目的，含『為了』之意，故以『<span class="wen-jin-text">𲾉</span>』作『為』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲰭", structure: "⿰生妄", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">shēng</span>`, reading: `ㄕㄥ`, 
+            definition: `凡人生命。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲰭</span>，由生、妄組成。前面所謂『（<span class="wen-jin-text">𲾉</span><span class="tw-ext-b">𢦉</span>）為見』，是為見生前之像。生前者，未生之前也，在胎胞之內，本是先天乾坤本體。十月足滿，瓜熟蒂落，則先天本體又有所失，妄者，忘也。這是對凡人生命的看法，故以『<span class="wen-jin-text">𲰭</span>』為『生』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𢛣", structure: "⿱泯心", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">qián</span>`, reading: `ㄑㄧㄢˊ`, 
+            definition: `生前先天本體。《〈亳州老君碑古字譜〉考釋》：「<span class="tw-ext-b">𢛣</span>，《漢語大字典》：同『滅』。《字彙補‧心部》：『渴，與滅同』。各《老君碑》注本均讀作『前』字。此字由水、民、心組成。心屬火，既有水，即可水火既濟。民者，四民也，指眼、耳、鼻、口。水火既濟，四民歸一，乃生前先天本體，故以『<span class="tw-ext-b">𢛣</span> 』為『前』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲥩", structure: "⿱朋寂", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">tǐ</span>`, reading: `ㄊㄧˇ`, 
+            definition: `仙體。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲥩</span>，由月、月、寂組成。前面講生前，即要認識本體和凡體之別。月是純陰，寂靜也。陰盡陽生，仙體也。故以『<span class="wen-jin-text">𲥩</span>』為『體』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𡈟", structure: "⿴囗眼", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">rán</span>`, reading: `ㄖㄢˊ`, 
+            definition: `本體自然之象。《〈亳州老君碑古字譜〉考釋》：「<span class="tw-ext-b">𡈟</span>，《漢語大字典》：同『看』。《改併四聲篇海・囗部》：『圈，與看同義。』《字彙補・囗部》：『與看同。』各《老君碑》注本均讀作『然』字。此字亦可視由口、眼組成。口眼閉脣，定光守玄，一意歸中，凡體穩如泰山，乃本體自然之象，故以『<span class="tw-ext-b">𡈟</span>』為『然』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55051565023_cc66344aec_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲙍", structure: "⿱地元", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">qiān</span>`, reading: `ㄑㄧㄢ`, 
+            definition: `真鉛。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲙍</span>，由地、元組成。地為坤屬陰，陰極返陽是陰中之真陽。鉛和汞是燒煉外丹的基本藥物，內丹借用鉛比喻腎，腎屬水屬陰，內藏元陽真氣，因此稱為『真鉛』。真鉛為水中之金，金為內丹之母體。此字以地元比喻腎水之元陽真氣，為之真鉛，故以『<span class="wen-jin-text">𲙍</span>』為『鉛』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55084555559_ea271d572e_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲐳", structure: "⿰亻𡥘", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">gǒng</span>`, reading: `ㄍㄨㄥˇ`, 
+            definition: `真汞。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲐳</span>，由人、母、子組成。內丹借用汞比喻心，心屬火屬陽，內藏正陽之精，因此稱為『真汞』。汞就是水銀，內丹學亦喻為『姹女』、『元神』。水銀的流動性很好又易揮發。內丹學也認為真汞之性靈動，變化莫測，故而在燒煉時要用真鉛扶持。《參同契》云：『河上姹女，靈而最神……將欲制之，黃芽為根。』『黃芽』喻『真鉛』，姹女以黃芽為根，即是以真鉛煉製真汞，此乃外丹內丹的共同原理。母為女，喻姹女；人、子喻黃芽，扶持姹女，故以『<span class="wen-jin-text">𲐳</span>』為『汞』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55084288741_22197fdb62_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𡙎", structure: "⿱天⿰天天", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">jiāo</span>`, reading: `ㄐㄧㄠ`, 
+            definition: `隨天時而交。《〈亳州老君碑古字譜〉考釋》：「<span class="tw-ext-b">𡙎</span>，《漢語大字典》：『同皎。潔白光明。』《字彙補‧大部》：『<span class="tw-ext-b">𡙎</span>，音義與皎同。』各《老君碑》注本均讀作『交』字。上述鉛汞乃修煉藥物，陰陽交媾，剛柔相結，始成聖胎。此字以『皎』借為『交』，亦有隨天時而交之意。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55084288741_22197fdb62_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𡚌", structure: "⿱⿰天天⿰天天", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">jiē</span>`, reading: `ㄐㄧㄝ`, 
+            definition: `交接、結丹。《〈亳州老君碑古字譜〉考釋》：「<span class="tw-ext-b">𡚌</span>，《漢語大字典》：『《改併四聲篇海・天部》引《搜真玉鏡》：<span class="tw-ext-b">𡚌</span>，結、皓二音。』〔元〕鄭采《題復古秋山對月圖》：『天<span class="tw-ext-b">𡚌</span><span class="tw-ext-b">𡚌</span>兮月<span class="tw-kai-98">朤朤</span>。』（天皓皓兮月朗朗——筆者注）各《老君碑》注本均讀作『接』字。此字由四個天字組成，亦指人隨天時而度，藥物煉到一定火候，即可得太虛中無形之生炁，以後天感先天，再由先天返出先天之先天，達到重乾之象結成仙丹。『<span class="tw-kai-98">☰</span>』為八卦之乾，代表天；『<span class="tw-kai-98">䷀</span>』為六十四卦之乾，是兩個『天』重疊，『<span class="tw-ext-b">𡚌</span>』又是<span class="tw-kai-98">䷀䷀</span>並列，四個天，當為重乾之象。呂祖《得大還詩》曰：『修修修得到乾乾，方是人間一醉仙。』故以『<span class="tw-ext-b">𡚌</span>』為『接』，含交接、 結丹二義。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55084288741_22197fdb62_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𣊭", structure: "⿱⿰日日⿰日日", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">shén</span>`, reading: `ㄕㄣˊ`, 
+            definition: `「<span class="tw-ext-b">𣊭</span><span class="tw-kai-98">朤</span>」：神丹。《〈亳州老君碑古字譜〉考釋》：「<span class="tw-ext-b">𣊭</span>，由四個日字組成，四日為陽，與下面四陰相對應，共同描述神丹」。`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55084288741_22197fdb62_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "朤", structure: "⿱朋朋", mainFont: "", 
+            pinyin: `<span class="vn-roman">dān</span>`, reading: `ㄉㄢ`, 
+            definition: `「<span class="tw-ext-b">𣊭</span>朤」：神丹。《〈亳州老君碑古字譜〉考釋》：「朤，《漢語大字典》：『同朗』。《改併四聲篇海・天部》引《搜真玉鏡》：『朤，朗、照、耀，三音。』《字彙補‧月部》：『音義與朗同。』各《老君碑》注本均讀作『丹』字。此字由四個月字組成，四月為陰，與上面的四陽相應。坤為陰，六十四卦之坤為『<span class="tw-kai-98">䷁</span>』。<span class="tw-ext-b">𣊭</span>朤相連，四陽四陰，四陽為<span class="tw-kai-98">䷀䷀</span>，四陰為<span class="tw-kai-98">䷁䷁</span>，集陰陽交感之極限，合天地正炁之精華，故為『神丹』二字」。`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55084288741_22197fdb62_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲧤", structure: "⿰木⿳金⿰水火土", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">jiù</span>`, reading: `ㄐㄧㄡˋ`, 
+            definition: `成就。《〈亳州老君碑古字譜〉考釋》：「由金、木、水、火、土，五行組成。五行俱全，生剋協調，無形無邪，一靈獨存，即為神丹成就。故以『<span class="wen-jin-text">𲧤</span>』為『就』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55084288741_22197fdb62_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𰋟", structure: "⿱天天", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">qián</span>`, reading: `ㄑㄧㄢˊ`, 
+            definition: `乾坤之乾。《〈亳州老君碑古字譜〉考釋》：「由兩個天字組成，天為乾，八卦為<span class="tw-kai-98">☰</span>，天上之天，乃乾上之乾，六十四卦為<span class="tw-kai-98">䷀</span>，乃真人所居之地。故以『<span class="wen-jin-text">𰋟</span>』為『乾』」。`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55084288741_22197fdb62_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "厵", structure: "⿱原⿰原原", mainFont: "tw-kai-98", 
+            pinyin: `<span class="vn-roman">yuán</span>`, reading: `ㄩㄢˊ`, 
+            definition: `太虛之空。《〈亳州老君碑古字譜〉考釋》：「<span class="tw-kai-98">厵</span>，《漢語大字典》：『同源。』《廣韻‧元韻》:『源，《說文》本作<span class="tw-kai-98">厵</span>，篆文省作原，後人加水。』此字由三原組成，原者，源，根源也。既明真體，即明根源，三原乃源學，故以『<span class="tw-kai-98">厵</span>』為『原』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55084288741_22197fdb62_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲛻", structure: "⿱⿰男𤲶女", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">xì</span>`, reading: `ㄒㄧˋ`, 
+            definition: `系也。《〈亳州老君碑古字譜〉考釋》：「由三男一女組成。一女乃是無限之根，太極之母，是老陰，又名無極天尊，是整綱。上有三男，乃是三陽三魂三寶，精氣神也。以無極統之，故曰『系』」。`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55084288741_22197fdb62_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𤛭", structure: "⿱⿰牛牛⿰牛牛", mainFont: "tw-ext-b", 
+            pinyin: `<span class="vn-roman">qún</span>`, reading: `ㄑㄩㄣˊ`, 
+            definition: `群也。《〈亳州老君碑古字譜〉考釋》：「<span class="tw-ext-b">𤛭</span>，《漢語大字典》：《改併四聲篇海‧牛部》，引《搜真玉鏡》：『<span class="tw-ext-b">𤛭</span>，音群』。此字以四牛組成，四牛為群，亦喻眼耳鼻舌四大性，四大祖竅。』」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55084288741_22197fdb62_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲬺", structure: "⿱無⿰無無", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">xiān</span>`, reading: `ㄒㄧㄢ`, 
+            definition: `仙也。《〈亳州老君碑古字譜〉考釋》：「<span class="wen-jin-text">𲬺</span>，由三个無字组成。大功成就，萬事萬物皆為無。無欲無貪亦無為，到無求處便無憂。宋元以來的內丹書中，把直接『煉神還虛』一類道功作為『上品丹法』或『最上一乘頓法』，強調以虛為身，以無為心，《玄宗要旨》：『其授受只是一個無字，最後連一個無字也無。告訴你一切放下，放得一絲不掛，一切丟開，丟得一毛孔也無。』雖名得道，實無所得，無非得到一個湛定不動的空寂心而已。然而得無即得『道』，萬物皆有生滅，唯『道』長存，故而『無即是有』。若連無無也無，當為真仙，故以『<span class="wen-jin-text">𲬺</span>』為『仙』。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55084288741_22197fdb62_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "󺜖", structure: "⿰扌垔", mainFont: "tw-plus-98", 
+            pinyin: `<span class="vn-roman">liàn</span>`, reading: `ㄌㄧㄢˋ`, 
+            definition: `「<span class="tw-ext-b">𥒯</span>（煉）」之異體。〈亳州老君碑古字譜〉其一版本。韓國<span class="vn-roman">Unicode</span>漢字檢索系統（<span class="nanum-text">유니코드한자 검색시스템</span>）中有收錄該字，但據其提供之出處，明顯為收字錯誤。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086320324_27504a5606_z.jpg" class="zoomable" style="max-width:550px"><br> Unicode漢字檢索系統（유니코드한자 검색시스템）<img src=" https://live.staticflickr.com/65535/55085174997_73ff49dd31_z.jpg " class="zoomable" style="max-width:550px"><br> 《朝鮮王朝實錄‧高宗太皇帝實錄卷之一‧七月九日》頁六十一<img src=" https://live.staticflickr.com/65535/55085179057_7c3fe9ecec_z.jpg " class="zoomable" style="max-width:550px">`
+        },
+        { 
+            char: zhen_img, structure: "⿰正真", mainFont: "", 
+            pinyin: `<span class="vn-roman">zhēn</span>`, reading: `ㄓㄣ`, 
+            definition: `「靕」之異體。《〈亳州老君碑古字譜〉考釋》：「有的抄本將『靕』寫成『<span class="def-inline-flickr">${zhen_img}</span>』，《漢語大字典》無『<span class="def-inline-flickr">${zhen_img}</span>』字，說明傳鈔有誤。」`, 
+            bookSource: "《〈亳州老君碑古字譜〉考釋》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086288163_da4a63d9d1_z.jpg" class="zoomable" style="max-width:550px"><br>〈亳州老君碑古字譜〉其一版本<img src=" https://live.staticflickr.com/65535/55085196272_db84e01049_z.jpg " class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: xing_img_2, structure: "⿱⿰亻决心", mainFont: "", 
+            pinyin: `<span class="vn-roman">xíng</span>`, reading: `ㄒㄧㄥˊ`, 
+            definition: `「<span class="tw-ext-b">𠎢</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086320324_27504a5606_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: yi4_img, structure: "⿰言⿱天井", mainFont: "", 
+            pinyin: `<span class="vn-roman">yì</span>`, reading: `ㄧˋ`, 
+            definition: `「<span class="tw-kai-98">㴁</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086320324_27504a5606_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: xi1_img, structure: "⿱⿰口虍命", mainFont: "", 
+            pinyin: `<span class="vn-roman">hū</span>`, reading: `ㄏㄨ`, 
+            definition: `「<span class="wen-jin-text">𲗌</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086320324_27504a5606_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: xi2_img, structure: "⿱⿸口虍卩", mainFont: "", 
+            pinyin: `<span class="vn-roman">xī</span>`, reading: `ㄒㄧ`, 
+            definition: `「<span class="wen-jin-text">𲖈</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55053240284_533f67d0bc_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: xi_wu_img, structure: "⿴囗無", mainFont: "", 
+            pinyin: `<span class="vn-roman">xí</span>`, reading: `ㄒㄧˊ`, 
+            definition: `「<span class="wen-jin-text">𲘠</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086320324_27504a5606_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: you_img_2, structure: "⿱夶⿰㫗享", mainFont: "", 
+            pinyin: `<span class="vn-roman">yóu</span>`, reading: `ㄧㄡˊ`, 
+            definition: `「<span class="wen-jin-text">𲛁</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086320324_27504a5606_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: xin_heart_img, structure: "⿱⿰君玄火", mainFont: "", 
+            pinyin: `<span class="vn-roman">xīn</span>`, reading: `ㄒㄧㄣ`, 
+            definition: `「<span class="wen-jin-text">𲬍</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086320324_27504a5606_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: mie_img_2, structure: "⿱⿰冫屯火", mainFont: "", 
+            pinyin: `<span class="vn-roman">miè</span>`, reading: `ㄇㄧㄝˋ`, 
+            definition: `「<span class="wen-jin-text">𲩗</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086320324_27504a5606_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: mie_img_3, structure: "⿱⿰氵⿻乚二火", mainFont: "", 
+            pinyin: `<span class="vn-roman">miè</span>`, reading: `ㄇㄧㄝˋ`, 
+            definition: `「<span class="wen-jin-text">𲩗</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55053240284_533f67d0bc_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: wu_img_2, structure: "⿺⿳口㇇乀了", mainFont: "", 
+            pinyin: `<span class="vn-roman">wú</span>`, reading: `ㄨˊ`, 
+            definition: `「<span class="tw-ext-b">𧾿</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086320324_27504a5606_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𰑚", structure: "⿰忄守", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">jí</span>`, reading: `ㄐㄧˊ`, 
+            definition: `「<span class="tw-ext-b">𢚍</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55053240284_533f67d0bc_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: shou_huo_img, structure: "⿱⿰忄守火", mainFont: "", 
+            pinyin: `<span class="vn-roman">jí</span>`, reading: `ㄐㄧˊ`, 
+            definition: `「<span class="tw-ext-b">𢚍</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086320324_27504a5606_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲺸", structure: "⿰月窗", mainFont: "wen-jin-text", 
+            pinyin: `<span class="vn-roman">wàng</span>`, reading: `ㄨㄤˋ`, 
+            definition: `「<span class="wen-jin-text">𲺸</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其二版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086320324_27504a5606_z.jpg" class="zoomable" style="max-width:550px"><img src="https://live.staticflickr.com/65535/55053240284_533f67d0bc_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: shen_guang_xin_img, structure: "⿱⿰身光心", mainFont: "", 
+            pinyin: `<span class="vn-roman">zhào</span>`, reading: `ㄓㄠˋ`, 
+            definition: `「<span class="tw-ext-b">𠒸</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086320324_27504a5606_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: min2_2_img, structure: "⿱⿰冫民⿰目目", mainFont: "", 
+            pinyin: `<span class="vn-roman">qián</span>`, reading: `ㄑㄧㄢˊ`, 
+            definition: `「<span class="tw-ext-b">𢛣</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086320324_27504a5606_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: ti3_img, structure: "⿳⿰目目冖叔", mainFont: "", 
+            pinyin: `<span class="vn-roman">tǐ</span>`, reading: `ㄊㄧˇ`, 
+            definition: `「<span class="wen-jin-text">𲥩</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55085196272_db84e01049_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: mu_shou_img, structure: "⿱㑄手", mainFont: "", 
+            pinyin: `<span class="vn-roman">gǒng</span>`, reading: `ㄍㄨㄥˇ`, 
+            definition: `「<span class="wen-jin-text">𲐳</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086320324_27504a5606_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: jiu4_img, structure: "⿳⿰木金⿰水火土", mainFont: "", 
+            pinyin: `<span class="vn-roman">jiù</span>`, reading: `ㄐㄧㄡˋ`, 
+            definition: `「<span class="wen-jin-text">𲧤</span>」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086320324_27504a5606_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: ya4_img, structure: "⿱丶⿵冂亞", mainFont: "", 
+            pinyin: `<span class="vn-roman">kūn</span>`, reading: `ㄎㄨㄣ`, 
+            definition: `「閸」之異體。`, 
+            bookSource: "〈亳州老君碑古字譜〉其一版本",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55086320324_27504a5606_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: xing_img, structure: "⿳㓁一八", mainFont: "", 
+            pinyin: `<span class="vn-roman">xīng</span>`, reading: `ㄒㄧㄥ`, 
+            definition: `「興」之異體。《明實錄‧明宣宗實錄 卷十六‧宣德元年‧四月二十五日》：「戊子賜，永<span class="def-inline-flickr">${xing_img}</span>王志墣冕服以襲之。」`, 
+            bookSource: "《明實錄‧明宣宗實錄 卷十六‧宣德元年‧四月二十五日》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55083318072_b1c6fe4d78_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+       { 
+            char: pan_img, structure: "⿱⿰⿱欠卉殳皿", mainFont: "", 
+            pinyin: `待考`, reading: `待考`, 
+            definition: `待考。《明實錄‧明神宗實錄 卷三百五十二‧萬曆二十八年‧十月五日》：「驕泰易乘，恣<span class="def-inline-flickr">${pan_img}</span>轉劇。」`, 
+            bookSource: "《明實錄‧明神宗實錄 卷三百五十二‧萬曆二十八年‧十月五日》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55084611225_17d9a71de4_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: muren_img,  structure: "⿰木⿱刃⿰刃刃",  mainFont: "", 
+            pinyin: `待考`, reading: `待考`, 
+            definition: `城名。<span class="def-inline-flickr">${muren_img}</span>城。《補閑集‧中卷》：「胡羗看世事，堪羨臥雲人。爲中道按廉巡歷<span class="def-inline-flickr">${muren_img}</span>城。」`, 
+            bookSource: "《補閑集‧中卷》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55093148236_122bd71096_z.jpg" class="zoomable" style="max-width:550px"><img src="https://live.staticflickr.com/65535/55093516600_e661e2315e_z.jpg" class="zoomable" style="max-width:550px">` 
+         },
+         { 
+            char: "𪱹", structure: "⿰木水", mainFont: "tw-ext-b", 
+            pinyin: `待考（日語：もちのき）`, reading: `待考（日語：もちのき）`, 
+            definition: `木名。全緣冬青。《明實錄‧明穆宗實錄 卷六二‧隆慶五年‧十月二十七日》：「革慶成王府奉國將軍，表<span class="tw-ext-b">𪱹</span>祿米十之二，以匿父喪不報冒支。」《拾萬字鏡難字盡‧木部》：「〔読み〕もちのき。〔解説〕『新撰字鏡』に「毛知乃木」とある。「黐の木（モチノキ）」は、モチノキ科の常緑高木で、高さ１０メートルに達する。」（翻譯：〔讀音〕もちのき。〔解說〕《新撰字鏡》載「毛知乃木」。「全緣冬青（モチノキ）」為冬青科的常綠大喬木，高度可達 10 公尺。）`, 
+            bookSource: "《明實錄‧明穆宗實錄 卷六二‧隆慶五年‧十月二十七日》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55093540210_95f34436be_z.jpg" class="zoomable" style="max-width:550px"><span class="book-source-text" style="margin-top:15px; display:block;">《拾萬字鏡難字盡‧木部》</span><img src="https://live.staticflickr.com/65535/55093445409_f2d442252a_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "𲍄", structure: "⿰魚嶷", mainFont: "wen-jin-text", 
+            pinyin: "待考", reading: "待考", 
+            definition: `人名。充<span class="wen-jin-text">𲍄</span>。《明實錄‧明神宗實錄 卷五五六‧萬曆四十五年‧四月十二日》：「隰川王府奉國將軍充<span class="wen-jin-text">𲍄</span>暫管府事。」（據國史編纂委員會（<span class="nanum-text">국사편찬위원회</span>）所校，${fish_yee_img}為該字之異體。）`, 
+            bookSource: "《明實錄‧明神宗實錄 卷五五六‧萬曆四十五年‧四月十二日》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55093468869_20d5e34b01_z.jpg" class="zoomable" style="max-width:550px"><br>國史編纂委員會<img src=" https://live.staticflickr.com/65535/55093565065_57d014db5a_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: dong_shu_yu_img, structure: "⿱⿰東殳玉", mainFont: "", 
+            pinyin: "待考", reading: "待考", 
+            definition: `人名。崔涵${dong_shu_yu_img}。《清實錄‧世祖章實錄 卷二‧修纂官》：「監生 臣 崔涵${dong_shu_yu_img}。」`, 
+            bookSource: "《清實錄‧世祖章實錄 卷二‧修纂官》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55093598550_9a5e141c57_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: "筽", structure: "⿱𥫗吳", mainFont: "", 
+            pinyin: `<span class="vn-roman">wú</span>（韓語：<span class="nanum-text">오</span>）`, reading: `ㄨˊ（韓語：<span class="nanum-text">오</span>）`, 
+            definition: `郡名、山名。《輿地勝覽‧靈光》：「〔郡名〕筽城」、「〔山川〕筽山（在郡西二十五里鎮山）。」（韓語音讀由韓國<span class="vn-roman">Unicode</span>漢字檢索系統提供，中文音讀即據韓語音讀和偏旁反推而得。）`, 
+            bookSource: "《輿地勝覽‧靈光‧郡名》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55093244926_0118cdce6f_z.jpg" class="zoomable" style="max-width:550px"><br>《輿地勝覽‧靈光‧山川》<img src="https://live.staticflickr.com/65535/55093455513_69d7954958_z.jpg" class="zoomable" style="max-width:550px"><br>韓國<span class="vn-roman">Unicode</span>漢字檢索系統<img src="https://live.staticflickr.com/65535/55092371482_cc38422489_z.jpg" class="zoomable" style="max-width:550px">`
+        },
+        { 
+            char: huo_chu_img, structure: "⿰火處", mainFont: "", 
+            pinyin: "待考", reading: "待考", 
+            definition: `人名。厚${huo_chu_img}。《明實錄‧明世宗實錄 卷一五一‧嘉靖十二年‧六月 二十九日》：「故敢冐死入奏，乞遣官按其事之先後，以白其冤願停子奉國將軍厚${huo_chu_img}，及女泰和縣君祿，以贖其罪事。」`, 
+            bookSource: "《明實錄‧明世宗實錄 卷一五一‧嘉靖十二年‧六月 二十九日》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55095062918_769bc6f66b_z.jpg" class="zoomable" style="max-width:550px">` 
+        },
+        { 
+            char: duan_wu_img, structure: "⿰耑吾", mainFont: "", 
+            pinyin: `<span class="vn-roman">yǔ</span>`, reading: `ㄩˇ`, 
+            definition: `「齬」之異體。《備邊司謄錄》：「上曰：『西路凋弊已甚，又値喪事，各站供億，必多${duan_qie_img}${duan_wu_img}（齟齬）。』（據韓國國史編纂委員會的<span class="nanum-text">조선시대 사료</span> <span class="vn-roman">DB</span>（朝鮮時代史料<span class="vn-roman">DB</span> ）所提供之，「${duan_qie_img}${duan_wu_img}」應為「齟齬」）`, 
+            bookSource: "《備邊司謄錄》",
+            bookImg: `<img src="https://live.staticflickr.com/65535/55093982192_d9b56e5de3_z.jpg" class="zoomable" style="max-width:550px"><br>韓國國史編纂委員會<img src="https://live.staticflickr.com/65535/55094862711_4cfcaf69e9_z.jpg" class="zoomable" style="max-width:550px">` 
+         },
+        { 
+        char: chuang_img,  structure: "⿰爿床", mainFont: "", 
+        pinyin: `<span class="vn-roman">chuáng</span>`, reading: `ㄔㄨㄤˊ`, 
+        definition: `「床」之異體。《承政院日記‧乙未七月二十九日辰時》：「卽下${chuang_img}而坐，監饌後復御玉座，上命麟漢進前曰，耆臣呼新來，前雖一行，今可再爲，左相率入，命注書呼新來。」`, 
+        bookSource: "《承政院日記‧乙未七月二十九日辰時》",
+        bookImg: `<img src="https://live.staticflickr.com/65535/55095077473_9e3b2df9a6_z.jpg" class="zoomable" style="max-width:550px">` 
+        }
+    ];
+
+    // --- 功能初始化 ---
+    const cardList = document.getElementById('cardList'), searchInput = document.getElementById('searchInput'),
+          searchBtn = document.getElementById('searchBtn'), idcToolbar = document.getElementById('idcToolbar'),
+          charsTable = document.getElementById('charsTable'), pagination = document.getElementById('pagination'),
+          overlay = document.getElementById('zoomOverlay'), viewer = document.getElementById('zoomViewer'), 
+          vImg = document.getElementById('viewerImg'), vBtn = document.getElementById('zoomClose');
+    
+    let scale = 1, posX = 0, posY = 0, startX = 0, startY = 0, isDragging = false;
+    let currentPage = 1;
+    const itemsPerPage = 100;
+
+    function renderCards(data) {
+        cardList.innerHTML = '';
+        if (data.length === 0) { cardList.innerHTML = '<div style="text-align:center; padding:50px; color:#999;">本網站主收錄教育部《異體字字典》中未收錄之字。</div>'; return; }
+        data.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'character-card';
+            card.innerHTML = `
+                <div class="char-visual"><div class="main-char ${item.mainFont || ''}">${item.char}</div><div class="char-structure-box"><div class="char-structure">字形結構：${item.structure}</div></div></div>
+                <div class="char-info">
+                    <table class="info-table">
+                        <tr><th>注音</th><td>${item.reading}</td></tr>
+                        <tr><th>漢語拼音</th><td>${item.pinyin || ''}</td></tr>
+                        <tr><th>釋義</th><td>${item.definition}</td></tr>
+                        ${ (item.bookSource || item.bookImg) ? `<tr><th>參考文獻</th><td><span class="book-source-text">${item.bookSource || ''}</span><div class="book-img-container">${item.bookImg || ''}</div></td></tr>` : '' }
+                    </table>
+                </div>
+            `;
+            cardList.appendChild(card);
+        });
+        document.querySelectorAll('.zoomable').forEach(img => {
+            img.onclick = () => openViewer(img.src);
+        });
+    }
+
+    function openViewer(src) {
+        vImg.src = src; scale = 1; posX = 0; posY = 0; updateTransform();
+        overlay.style.display = 'block'; viewer.style.display = 'block'; vBtn.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeViewer() {
+        overlay.style.display = 'none'; viewer.style.display = 'none'; vBtn.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    vBtn.onclick = overlay.onclick = closeViewer;
+
+    viewer.onwheel = (e) => {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? -0.15 : 0.15;
+        scale = Math.min(Math.max(0.5, scale + delta), 8);
+        updateTransform();
+    };
+
+    viewer.onmousedown = (e) => {
+        isDragging = true; startX = e.clientX - posX; startY = e.clientY - posY;
+    };
+
+    window.onmousemove = (e) => {
+        if (!isDragging) return;
+        posX = e.clientX - startX; posY = e.clientY - startY;
+        updateTransform();
+    };
+
+    window.onmouseup = () => isDragging = false;
+
+    function updateTransform() {
+        vImg.style.transform = `translate(-50%, -50%) translate(${posX}px, ${posY}px) scale(${scale})`;
+    }
+
+    /* 搜尋邏輯 */
+    function performSearch() {
+        const val = searchInput.value.trim();
+        if (!val) return;
+        const res = characters.filter(c => {
+            const charText = typeof c.char === 'string' ? c.char : '';
+            return charText.includes(val) || 
+                   c.reading.includes(val) || 
+                   c.structure.includes(val) ||
+                   (val === "ㄓㄠ" && c.structure === "⿰崔刂") ||
+                   (val === "ㄨㄢˊ" && c.structure === "⿷辶玩") ||
+                   (val === "ㄓㄨㄛˊ" && c.structure === "⿱立即")||
+                   (val === "ㄎㄠˋ" && c.structure === "⿱劫矣")||
+                   (val === "ㄧˇ" && c.structure === "⿺辶氏")||
+                   (val === "ㄊㄧˋ" && c.structure === "⿺辶雉")||
+                   (val === "ㄅㄣˇ" && c.structure === "⿺辶夲")||
+                   (val === "ㄉㄚˊ" && c.structure === "⿺辶荅")||
+                   (val === "ㄕㄨㄛˋ" && c.structure === "⿲口十口")||
+                   (val === "ㄓㄨㄢˋ" && c.structure === "⿺辶轉")||
+                   (val === "ㄧˋ" && c.structure === "⿺⿱辶異貝")||
+                   (val === "ㄌㄟˊ" && c.structure === "⿺辶壘")||
+                   (val === "ㄅㄧㄢˋ" && c.structure === "⿱厶下")||
+                   (val === "待考" && c.structure === "⿰有頁")||
+                   (val === "ㄓㄣ" && c.structure === "⿰正真") ||
+                   (val === "ㄒㄧㄥˊ" && c.structure === "⿱⿰亻决心") ||
+                   (val === "ㄧˋ" && c.structure === "⿰言⿱天井") ||
+                   (val === "ㄏㄨ" && c.structure === "⿰口⿸虍令") ||
+                   (val === "ㄒㄧ" && c.structure === "⿰口⿸虍命") ||
+                   (val === "ㄒㄧˊ" && (c.structure === "⿴囗無" || c.reading === "ㄒㄧˊ")) ||
+                   (val === "ㄧㄡˊ" && c.structure === "⿱夶⿰㫗享") ||
+                   (val === "ㄒㄧㄣ" && c.structure === "⿱⿰君玄火") ||
+                   (val === "ㄇㄧㄝˋ" && (c.structure === "⿱⿰氵⿻乚二火" || c.structure === "⿱⿰冫屯火")) ||
+                   (val === "ㄨˊ" && c.structure === "⿺⿳口㇇乀了") ||
+                   (val === "ㄐㄧˊ" && (c.structure === "⿱⿰忄守火" || c.structure === "⿰忄守")) ||
+                   (val === "ㄓㄠˋ" && c.structure === "⿱⿰身光心") ||
+                   (val === "ㄑㄧㄢˊ" && (c.structure === "⿱⿰冫民⿰目目" || c.reading === "ㄑㄧㄢˊ")) ||
+                   (val === "ㄊㄧˇ" && (c.structure === "⿳⿰目目冖叔" || c.reading === "ㄊㄧˇ")) ||
+                   (val === "ㄍㄨㄥˇ" && c.structure === "⿱㑄手") ||
+                   (val === "ㄐㄧㄡˋ" && (c.structure === "⿳⿰木金⿰水火土" || c.reading === "ㄐㄧㄡˋ")) ||
+                   (val === "ㄎㄨㄣ" && c.structure === "⿱丶⿵冂亞") ||
+                   (val === "ㄒㄧㄥ" && c.structure === "⿳㓁一八")||
+                   (val === "待考" && c.structure === "⿰木⿱刃⿰刃刃") ||
+                   (c.structure === "⿰木⿱刃⿰刃刃" && (val.includes("木") || val.includes("刃"))) ||
+                   (charText.includes("𪱹") || (c.structure === "⿰木水" && (val === "𪱹" || val === "木水" || val === "待考"))) ||
+                   (charText.includes("𲍄") || (c.structure === "⿰魚嶷" && (val === "𲍄" || val === "魚嶷" || val === "魚罒疑"))) ||
+                   (c.structure === "⿱⿰東殳玉" && (val === "東殳玉" || val.includes("東") || val.includes("殳") || val.includes("玉"))) ||
+                   (charText.includes("筽") || (c.structure === "⿱𥫗吳" && (val === "筽" || val === "ㄨˊ" || val.includes("吳")))) ||
+                   (c.structure === "⿰火處" && (val === "火處" || val.includes("火") || val.includes("處"))) ||
+                   (c.structure === "⿰爿床" && (val === "爿床" || val === "ㄔㄨㄤˊ" || val === "chuáng" || val.includes("爿") || val.includes("床"))) ||
+                   (c.structure === "⿱⿰⿱欠卉殳皿" && (val === "待考" || val.includes("欠") || val.includes("皿")));
+        });
+        toggleView('search'); renderCards(res); window.scrollTo(0, 0);
+    }
+
+    function toggleView(view) {
+        const sv = document.getElementById('searchView'), av = document.getElementById('allCharsView');
+        if (view === 'all') { sv.style.display = 'none'; av.style.display = 'block'; currentPage = 1; renderGrid(); }
+        else { sv.style.display = 'block'; av.style.display = 'none'; }
+    }
+
+    /* 修改：支援 100 字分頁的文字總表渲染 */
+    function renderGrid() {
+        charsTable.innerHTML = ''; 
+        pagination.innerHTML = '';
+        charsTable.style.display = 'table';
+        
+        const totalItems = characters.length;
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        
+        // 取得當前分頁的數據
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = Math.min(start + itemsPerPage, totalItems);
+        const pageData = characters.slice(start, end);
+
+        const cols = window.innerWidth < 600 ? 5 : 10;
+        let row;
+        
+        pageData.forEach((item, index) => {
+            if (index % cols === 0) row = charsTable.insertRow();
+            const cell = row.insertCell();
+            cell.innerHTML = item.char;
+            cell.className = item.mainFont || "";
+            cell.onclick = () => { renderCards([item]); toggleView('search'); window.scrollTo(0,0); };
+        });
+
+        // 渲染分頁按鈕
+        if (totalPages > 1) {
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.innerText = i;
+                btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                btn.onclick = () => {
+                    currentPage = i;
+                    renderGrid();
+                    window.scrollTo(0, 0);
+                };
+                pagination.appendChild(btn);
+            }
+        }
+    }
+
+    searchBtn.addEventListener('click', performSearch);
+    searchInput.onkeydown = (e) => { if (e.key === "Enter") performSearch(); };
+    document.getElementById('homeBtn').onclick = () => { searchInput.value = ''; renderCards([]); toggleView('search'); window.scrollTo(0,0); };
+    document.getElementById('showAllBtn').onclick = () => toggleView('all');
+
+    const idcs = "⿰⿱⿲⿳⿴⿵⿶⿷⿸⿹⿺⿻";
+    idcs.split('').forEach(c => {
+        const btn = document.createElement('button');
+        btn.className = 'idc-btn'; btn.innerText = c;
+        btn.onclick = () => { searchInput.value += c; searchInput.focus(); };
+        idcToolbar.appendChild(btn);
+    });
+</script>
+<script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script>
+</body>
+</html>
